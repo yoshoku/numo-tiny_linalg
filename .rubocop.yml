@@ -1,0 +1,35 @@
+require:
+  - rubocop-rake
+  - rubocop-minitest
+  - rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 2.7
+  NewCops: enable
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  Exclude:
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+
+Layout/LineLength:
+  AllowedPatterns: ['(\A|\s)#']
+
+Metrics/AbcSize:
+  Exclude:
+    - 'test/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'test/**/*'
+
+Style/GlobalVars:
+  Exclude:
+    - 'ext/**/*'
