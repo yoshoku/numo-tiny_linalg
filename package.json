@@ -1,0 +1,15 @@
+{
+  "name": "numo-tiny_linalg",
+  "repository": "git@github.com:yoshoku/numo-tiny_linalg.git",
+  "author": "Atsushi Tatsuma <yoshoku@outlook.com>",
+  "license": "BSD-3-Clause",
+  "private": true,
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.1",
+    "@commitlint/config-conventional": "^17.6.1",
+    "husky": "^8.0.3"
+  }
+}
