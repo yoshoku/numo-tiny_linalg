@@ -1,6 +1,13 @@
-#ifndef TINY_LINALG_H
-#define TINY_LINALG_H 1
+#ifndef NUMO_TINY_LINALG_H
+#define NUMO_TINY_LINALG_H 1
 
-#include "ruby.h"
+#if defined(TINYLINALG_USE_ACCELERATE)
+#include <Accelerate/Accelerate.h>
+#else
+#include <cblas.h>
+#include <lapacke.h>
+#endif
 
-#endif /* TINY_LINALG_H */
+#include <ruby.h>
+
+#endif /* NUMO_TINY_LINALG_H */
