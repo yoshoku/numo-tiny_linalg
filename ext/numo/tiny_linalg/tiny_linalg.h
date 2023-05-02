@@ -10,4 +10,7 @@
 
 #include <ruby.h>
 
+#include <numo/narray.h>
+#include <numo/template.h>
+
 #endif /* NUMO_TINY_LINALG_H */
