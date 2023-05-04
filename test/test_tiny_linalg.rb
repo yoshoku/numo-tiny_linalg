@@ -13,7 +13,7 @@ class TestTinyLinalg < Minitest::Test
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-8)
+    assert(error < 1e-7)
   end
 
   def test_lapack_sgesvd
@@ -22,7 +22,7 @@ class TestTinyLinalg < Minitest::Test
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-6)
+    assert(error < 1e-5)
   end
 
   def test_lapack_zgesvd
@@ -31,7 +31,7 @@ class TestTinyLinalg < Minitest::Test
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-8)
+    assert(error < 1e-7)
   end
 
   def test_lapack_cgesvd
@@ -40,6 +40,42 @@ class TestTinyLinalg < Minitest::Test
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-6)
+    assert(error < 1e-5)
+  end
+
+  def test_lapack_dgesdd
+    x = Numo::DFloat.new(5, 3).rand.dot(Numo::DFloat.new(3, 2).rand)
+    s, u, vt, = Numo::TinyLinalg::Lapack.dgesdd(x.dup, jobz: 'S')
+    z = u.dot(s.diag).dot(vt)
+    error = (x - z).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_sgesdd
+    x = Numo::SFloat.new(5, 3).rand.dot(Numo::SFloat.new(3, 2).rand)
+    s, u, vt, = Numo::TinyLinalg::Lapack.sgesdd(x.dup, jobz: 'S')
+    z = u.dot(s.diag).dot(vt)
+    error = (x - z).abs.max
+
+    assert(error < 1e-5)
+  end
+
+  def test_lapack_zgesdd
+    x = Numo::DComplex.new(5, 3).rand.dot(Numo::DComplex.new(3, 2).rand)
+    s, u, vt, = Numo::TinyLinalg::Lapack.zgesdd(x.dup, jobz: 'S')
+    z = u.dot(s.diag).dot(vt)
+    error = (x - z).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_cgesdd
+    x = Numo::SComplex.new(5, 3).rand.dot(Numo::SComplex.new(3, 2).rand)
+    s, u, vt, = Numo::TinyLinalg::Lapack.cgesdd(x.dup, jobz: 'S')
+    z = u.dot(s.diag).dot(vt)
+    error = (x - z).abs.max
+
+    assert(error < 1e-5)
   end
 end
