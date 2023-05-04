@@ -22,6 +22,11 @@ if RUBY_PLATFORM.match?(/mswin|cygwin|mingw/)
   abort 'libnarray.a is not found' unless have_library('narray', 'nary_new')
 end
 
+if RUBY_PLATFORM.include?('darwin') && Gem::Version.new('3.1.0') <= Gem::Version.new(RUBY_VERSION) &&
+   try_link('int main(void){return 0;}', '-Wl,-undefined,dynamic_lookup')
+  $LDFLAGS << ' -Wl,-undefined,dynamic_lookup'
+end
+
 use_accelerate = false
 if RUBY_PLATFORM.include?('darwin') && have_framework('Accelerate')
   $CFLAGS << ' -DTINYLINALG_USE_ACCELERATE'
