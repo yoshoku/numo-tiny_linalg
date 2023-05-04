@@ -19,7 +19,7 @@ task build: :compile # rubocop:disable Rake/Desc
 
 desc 'Run clang-format'
 task :'clang-format' do
-  sh 'clang-format -style=file -Werror --dry-run ext/numo/tiny_linalg/*.c ext/numo/tiny_linalg/*.h'
+  sh 'clang-format -style=file -Werror --dry-run ext/numo/tiny_linalg/*.cpp ext/numo/tiny_linalg/*.hpp'
 end
 
 Rake::ExtensionTask.new('tiny_linalg') do |ext|
