@@ -42,7 +42,7 @@ unless use_accelerate
     $CFLAGS << ' -DTINYLINALG_USE_BLAS'
   end
 
-  abort 'liblapack is not found' if !have_func('dsyevr') && !have_library('lapack')
+  abort 'liblapacke is not found' if !have_func('LAPACKE_dsyevr') && !have_library('lapacke')
   abort 'cblas.h is not found' unless have_header('cblas.h')
   abort 'lapacke.h is not found' unless have_header('lapacke.h')
 end
