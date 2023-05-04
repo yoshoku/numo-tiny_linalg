@@ -8,9 +8,14 @@ Gem::Specification.new do |spec|
   spec.authors = ['yoshoku']
   spec.email = ['yoshoku@outlook.com']
 
-  spec.summary = 'Write a short summary, because RubyGems requires one.'
-  spec.description = 'Write a longer description or delete this line.'
+  spec.summary = <<~MSG
+    Numo::TinyLinalg is a subset library from Numo::Linalg consisting only of methods used in Machine Learning algorithms.
+  MSG
+  spec.description = <<~MSG
+    Numo::TinyLinalg is a subset library from Numo::Linalg consisting only of methods used in Machine Learning algorithms.
+  MSG
   spec.homepage = 'https://github.com/yoshoku/numo-tiny_linalg'
+  spec.license = 'BSD-3-Clause'
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
