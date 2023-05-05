@@ -80,10 +80,6 @@ private:
       rb_raise(rb_eTypeError, "type of input array is invalid for overwriting");
       return Qnil;
     }
-
-    if (CLASS_OF(a_vnary) != nary_dtype) {
-      a_vnary = rb_funcall(nary_dtype, rb_intern("cast"), 1, a_vnary);
-    }
     if (!RTEST(nary_check_contiguous(a_vnary))) {
       a_vnary = nary_dup(a_vnary);
     }
