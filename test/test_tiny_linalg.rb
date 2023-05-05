@@ -78,4 +78,13 @@ class TestTinyLinalg < Minitest::Test
 
     assert(error < 1e-5)
   end
+
+  def test_svd
+    x = Numo::DFloat.new(5, 3).rand.dot(Numo::DFloat.new(3, 2).rand)
+    s, u, vt, = Numo::TinyLinalg.svd(x.dup, driver: 'sdd', job: 'S')
+    z = u.dot(s.diag).dot(vt)
+    error = (x - z).abs.max
+
+    assert(error < 1e-7)
+  end
 end
