@@ -54,9 +54,33 @@ $ gem install numo-tiny_linalg
 
 ## Usage
 
+An example of singular value decomposition.
+
 ```ruby
 require 'numo/tiny_linalg'
 
+x = Numo::DFloat.new(5, 2).rand.dot(Numo::DFloat.new(2, 3).rand)
+# =>
+# Numo::DFloat#shape=[5,3]
+# [[0.104945, 0.0284236, 0.117406],
+#  [0.862634, 0.210945, 0.922135],
+#  [0.324507, 0.0752655, 0.339158],
+#  [0.67085, 0.102594, 0.600882],
+#  [0.404631, 0.116868, 0.46644]]
+
+s, u, vt = Numo::TinyLinalg.svd(x, job: 'S')
+
+z = u.dot(s.diag).dot(vt)
+# =>
+# Numo::DFloat#shape=[5,3]
+# [[0.104945, 0.0284236, 0.117406],
+#  [0.862634, 0.210945, 0.922135],
+#  [0.324507, 0.0752655, 0.339158],
+#  [0.67085, 0.102594, 0.600882],
+#  [0.404631, 0.116868, 0.46644]]
+
+puts (x - z).abs.max
+# => 4.440892098500626e-16
 ```
 
 ## Contributing
