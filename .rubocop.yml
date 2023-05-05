@@ -19,6 +19,7 @@ Layout/LineLength:
   AllowedPatterns: ['(\A|\s)#']
 
 Metrics/AbcSize:
+  Max: 40
   Exclude:
     - 'test/**/*'
 
@@ -27,9 +28,19 @@ Metrics/BlockLength:
     - 'test/**/*'
     - '*.gemspec'
 
+Metrics/CyclomaticComplexity:
+  Max: 16
+
 Metrics/MethodLength:
+  Max: 40
   Exclude:
     - 'test/**/*'
+
+Metrics/PerceivedComplexity:
+  Max: 16
+
+Naming/MethodParameterName:
+  Enabled: false
 
 Style/GlobalVars:
   Exclude:
