@@ -9,13 +9,48 @@ This gem is still **under development** and may undergo many changes in the futu
 
 ## Installation
 
-Install the gem and add to the application's Gemfile by executing:
+Install the OpenBlas.
 
-    $ bundle add numo-tiny_linalg
+macOS:
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+```sh
+$ brew install openblas
+```
 
-    $ gem install numo-tiny_linalg
+Ubuntu:
+
+```sh
+$ sudo apt-get install libopenblas-dev liblapacke-dev
+```
+
+Install the gem and add to the application's Gemfile by executing.
+
+macOS:
+
+```sh
+$ bundle config --local build.numo-tiny_linalg "--with-opt-dir=/opt/homebrew/Cellar/openblas/0.3.23/"
+$ bundle add numo-tiny_linalg
+```
+
+Ubuntu:
+
+```sh
+$ bundle add numo-tiny_linalg
+```
+
+If bundler is not being used to manage dependencies, install the gem by executing.
+
+macOS:
+
+```sh
+$ gem install numo-tiny_linalg -- --with-opt-dir=/opt/homebrew/Cellar/openblas/0.3.23/
+```
+
+Ubuntu:
+
+```sh
+$ gem install numo-tiny_linalg
+```
 
 ## Usage
 
