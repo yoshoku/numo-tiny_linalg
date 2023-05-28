@@ -15,7 +15,7 @@
 
 namespace TinyLinalg {
 
-VALUE NaryTypes[4] = {
+const VALUE NaryTypes[4] = {
   numo_cDFloat,
   numo_cSFloat,
   numo_cDComplex,

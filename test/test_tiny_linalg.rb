@@ -87,4 +87,18 @@ class TestTinyLinalg < Minitest::Test
 
     assert(error < 1e-7)
   end
+
+  def test_blas_ddot
+    x = Numo::DFloat[1, 2, 3]
+    y = Numo::DFloat[4, 5, 6]
+
+    assert_equal 32, Numo::TinyLinalg::Blas.ddot(x, y)
+  end
+
+  def test_blas_sdot
+    x = Numo::SFloat[1, 2, 3]
+    y = Numo::SFloat[4, 5, 6]
+
+    assert_equal 32, Numo::TinyLinalg::Blas.sdot(x, y)
+  end
 end
