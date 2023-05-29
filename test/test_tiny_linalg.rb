@@ -101,4 +101,18 @@ class TestTinyLinalg < Minitest::Test
 
     assert_equal 32, Numo::TinyLinalg::Blas.sdot(x, y)
   end
+
+  def test_blas_zdotu
+    x = Numo::DComplex[Complex(1, 0), Complex(2, 1), Complex(3, 2)]
+    y = Numo::DComplex[Complex(4, 3), Complex(5, 4), Complex(6, 5)]
+
+    assert_equal Complex(18, 43), Numo::TinyLinalg::Blas.zdotu(x, y)
+  end
+
+  def test_blas_cdotu
+    x = Numo::SComplex[Complex(1, 0), Complex(2, 1), Complex(3, 2)]
+    y = Numo::SComplex[Complex(4, 3), Complex(5, 4), Complex(6, 5)]
+
+    assert_equal Complex(18, 43), Numo::TinyLinalg::Blas.cdotu(x, y)
+  end
 end
