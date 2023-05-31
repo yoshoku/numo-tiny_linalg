@@ -32,14 +32,12 @@ private:
     VALUE nary_dtype = NaryTypes[nary_dtype_id];
 
     if (CLASS_OF(x) != nary_dtype) {
-      printf("here?\n");
       x = rb_funcall(nary_dtype, rb_intern("cast"), 1, x);
     }
     if (!RTEST(nary_check_contiguous(x))) {
       x = nary_dup(x);
     }
-    if (CLASS_OF(x) != nary_dtype) {
-      printf("here?-2\n");
+    if (CLASS_OF(y) != nary_dtype) {
       y = rb_funcall(nary_dtype, rb_intern("cast"), 1, y);
     }
     if (!RTEST(nary_check_contiguous(y))) {
