@@ -8,6 +8,8 @@
 #include <lapacke.h>
 #endif
 
+#include <cstring>
+
 #include <ruby.h>
 
 #include <numo/narray.h>

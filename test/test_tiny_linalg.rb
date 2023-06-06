@@ -115,4 +115,20 @@ class TestTinyLinalg < Minitest::Test
 
     assert_equal Complex(18, 43), Numo::TinyLinalg::Blas.cdotu(x, y)
   end
+
+  def test_blas_dgemm
+    a = Numo::DFloat[[1, 2, 3], [4, 5, 6]]
+    b = Numo::DFloat[[7, 8, 9], [3, 2, 1]]
+
+    assert_equal Numo::DFloat[[19, 16, 13], [29, 26, 23], [39, 36, 33]], Numo::TinyLinalg::Blas.dgemm(a, b, transa: 'T')
+    assert_equal Numo::DFloat[[50, 10], [122, 28]], Numo::TinyLinalg::Blas.dgemm(a, b, transb: 'T')
+  end
+
+  def test_blas_sgemm
+    a = Numo::SFloat[[1, 2, 3], [4, 5, 6]]
+    b = Numo::SFloat[[7, 8, 9], [3, 2, 1]]
+
+    assert_equal Numo::SFloat[[19, 16, 13], [29, 26, 23], [39, 36, 33]], Numo::TinyLinalg::Blas.sgemm(a, b, transa: 'T')
+    assert_equal Numo::SFloat[[50, 10], [122, 28]], Numo::TinyLinalg::Blas.sgemm(a, b, transb: 'T')
+  end
 end
