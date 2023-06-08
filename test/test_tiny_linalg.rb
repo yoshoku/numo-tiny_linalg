@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class TestTinyLinalg < Minitest::Test
+class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
   def test_that_it_has_a_version_number
     refute_nil ::Numo::TinyLinalg::VERSION
   end
@@ -130,5 +130,21 @@ class TestTinyLinalg < Minitest::Test
 
     assert_equal Numo::SFloat[[19, 16, 13], [29, 26, 23], [39, 36, 33]], Numo::TinyLinalg::Blas.sgemm(a, b, transa: 'T')
     assert_equal Numo::SFloat[[50, 10], [122, 28]], Numo::TinyLinalg::Blas.sgemm(a, b, transb: 'T')
+  end
+
+  def test_blas_zgemm
+    a = (Numo::DComplex.new(2, 3).rand * 10).floor
+    b = (Numo::DComplex.new(2, 3).rand * 10).floor
+
+    assert_equal a.dot(b.transpose), Numo::TinyLinalg::Blas.zgemm(a, b, transb: 'T')
+    assert_equal a.transpose.dot(b), Numo::TinyLinalg::Blas.zgemm(a, b, transa: 'T')
+  end
+
+  def test_blas_cgemm
+    a = (Numo::SComplex.new(2, 3).rand * 10).floor
+    b = (Numo::SComplex.new(2, 3).rand * 10).floor
+
+    assert_equal a.dot(b.transpose), Numo::TinyLinalg::Blas.cgemm(a, b, transb: 'T')
+    assert_equal a.transpose.dot(b), Numo::TinyLinalg::Blas.cgemm(a, b, transa: 'T')
   end
 end

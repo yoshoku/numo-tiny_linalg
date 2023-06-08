@@ -18,7 +18,25 @@ struct SGemm {
   }
 };
 
-template <int nary_dtype_id, typename dtype, class BlasFn>
+struct ZGemm {
+  void call(const enum CBLAS_ORDER order, const enum CBLAS_TRANSPOSE transa, const enum CBLAS_TRANSPOSE transb,
+            const blasint m, const blasint n, const blasint k,
+            const dcomplex alpha, const dcomplex* a, const blasint lda, const dcomplex* b, const blasint ldb, const dcomplex beta,
+            dcomplex* c, const blasint ldc) {
+    cblas_zgemm(order, transa, transb, m, n, k, &alpha, a, lda, b, ldb, &beta, c, ldc);
+  }
+};
+
+struct CGemm {
+  void call(const enum CBLAS_ORDER order, const enum CBLAS_TRANSPOSE transa, const enum CBLAS_TRANSPOSE transb,
+            const blasint m, const blasint n, const blasint k,
+            const scomplex alpha, const scomplex* a, const blasint lda, const scomplex* b, const blasint ldb, const scomplex beta,
+            scomplex* c, const blasint ldc) {
+    cblas_cgemm(order, transa, transb, m, n, k, &alpha, a, lda, b, ldb, &beta, c, ldc);
+  }
+};
+
+template <int nary_dtype_id, typename dtype, class BlasFn, class Converter>
 class Gemm {
 public:
   static void define_module_function(VALUE mBlas, const char* modfn_name) {
@@ -82,8 +100,8 @@ private:
       }
     }
 
-    dtype alpha = kw_values[0] != Qundef ? NUM2DBL(kw_values[0]) : 1.0;
-    dtype beta = kw_values[1] != Qundef ? NUM2DBL(kw_values[1]) : 0.0;
+    dtype alpha = kw_values[0] != Qundef ? Converter().to_dtype(kw_values[0]) : Converter().one();
+    dtype beta = kw_values[1] != Qundef ? Converter().to_dtype(kw_values[1]) : Converter().zero();
     enum CBLAS_ORDER order = kw_values[2] != Qundef ? get_cblas_order(kw_values[2]) : CblasRowMajor;
     enum CBLAS_TRANSPOSE transa = kw_values[3] != Qundef ? get_cblas_trans(kw_values[3]) : CblasNoTrans;
     enum CBLAS_TRANSPOSE transb = kw_values[4] != Qundef ? get_cblas_trans(kw_values[4]) : CblasNoTrans;
