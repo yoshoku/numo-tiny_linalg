@@ -147,4 +147,22 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert_equal a.dot(b.transpose), Numo::TinyLinalg::Blas.cgemm(a, b, transb: 'T')
     assert_equal a.transpose.dot(b), Numo::TinyLinalg::Blas.cgemm(a, b, transa: 'T')
   end
+
+  def test_blas_dgemv
+    a = Numo::DFloat[[1, 2, 3], [4, 5, 6]]
+    x = Numo::DFloat[7, 8, 9]
+    b = a.transpose.dup
+
+    assert_equal a.dot(x), Numo::TinyLinalg::Blas.dgemv(a, x)
+    assert_equal b.transpose.dot(x), Numo::TinyLinalg::Blas.dgemv(b, x, trans: 'T')
+  end
+
+  def test_blas_sgemv
+    a = Numo::SFloat[[1, 2, 3], [4, 5, 6]]
+    x = Numo::SFloat[7, 8, 9]
+    b = a.transpose.dup
+
+    assert_equal a.dot(x), Numo::TinyLinalg::Blas.sgemv(a, x)
+    assert_equal b.transpose.dot(x), Numo::TinyLinalg::Blas.sgemv(b, x, trans: 'T')
+  end
 end
