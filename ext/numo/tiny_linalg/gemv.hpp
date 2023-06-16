@@ -1,4 +1,3 @@
-#include <iostream>
 namespace TinyLinalg {
 
 struct DGemv {
@@ -14,6 +13,22 @@ struct SGemv {
             const float alpha, const float* a, const blasint lda,
             const float* x, const blasint incx, const float beta, float* y, const blasint incy) {
     cblas_sgemv(order, trans, m, n, alpha, a, lda, x, incx, beta, y, incy);
+  }
+};
+
+struct ZGemv {
+  void call(const enum CBLAS_ORDER order, const enum CBLAS_TRANSPOSE trans, const blasint m, const blasint n,
+            const dcomplex alpha, const dcomplex* a, const blasint lda,
+            const dcomplex* x, const blasint incx, const dcomplex beta, dcomplex* y, const blasint incy) {
+    cblas_zgemv(order, trans, m, n, &alpha, a, lda, x, incx, &beta, y, incy);
+  }
+};
+
+struct CGemv {
+  void call(const enum CBLAS_ORDER order, const enum CBLAS_TRANSPOSE trans, const blasint m, const blasint n,
+            const scomplex alpha, const scomplex* a, const blasint lda,
+            const scomplex* x, const blasint incx, const scomplex beta, scomplex* y, const blasint incy) {
+    cblas_cgemv(order, trans, m, n, &alpha, a, lda, x, incx, &beta, y, incy);
   }
 };
 
