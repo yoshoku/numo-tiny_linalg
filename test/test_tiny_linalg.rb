@@ -122,6 +122,11 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
 
     assert_equal Numo::DFloat[[19, 16, 13], [29, 26, 23], [39, 36, 33]], Numo::TinyLinalg::Blas.dgemm(a, b, transa: 'T')
     assert_equal Numo::DFloat[[50, 10], [122, 28]], Numo::TinyLinalg::Blas.dgemm(a, b, transb: 'T')
+
+    x = (Numo::DFloat.new(3, 2).rand * 10).floor
+    y = (Numo::DFloat.new(2, 5).rand * 10).floor
+
+    assert_equal x.dot(y), Numo::TinyLinalg::Blas.dgemm(x, y)
   end
 
   def test_blas_sgemm

@@ -62,7 +62,7 @@ private:
     const options* opt = (options*)(lp->opt_ptr);
     const blasint lda = opt->transa == CblasNoTrans ? opt->k : opt->m;
     const blasint ldb = opt->transb == CblasNoTrans ? opt->n : opt->k;
-    const blasint ldc = opt->m;
+    const blasint ldc = opt->n;
     BlasFn().call(opt->order, opt->transa, opt->transb, opt->m, opt->n, opt->k, opt->alpha, a, lda, b, ldb, opt->beta, c, ldc);
   };
 
