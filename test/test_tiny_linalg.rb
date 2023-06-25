@@ -215,4 +215,18 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert_equal a.dot(x), Numo::TinyLinalg::Blas.cgemv(a, x)
     assert_equal b.transpose.dot(x), Numo::TinyLinalg::Blas.cgemv(b, x, trans: 'T')
   end
+
+  def test_blas_dnrm2
+    a = Numo::DFloat.new(3).rand
+    error = (Numo::NMath.sqrt(a.dot(a)) - Numo::TinyLinalg::Blas.dnrm2(a)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_blas_snrm2
+    a = Numo::SFloat.new(3).rand
+    error = (Numo::NMath.sqrt(a.dot(a)) - Numo::TinyLinalg::Blas.dnrm2(a)).abs.max
+
+    assert(error < 1e-5)
+  end
 end
