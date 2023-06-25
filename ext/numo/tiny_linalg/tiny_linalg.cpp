@@ -11,12 +11,61 @@ VALUE rb_mTinyLinalg;
 VALUE rb_mTinyLinalgBlas;
 VALUE rb_mTinyLinalgLapack;
 
+static VALUE blas_char(int argc, VALUE* argv, VALUE self) {
+  if (argc < 1) {
+    rb_raise(rb_eTypeError, "invalid data type for BLAS/LAPACK");
+    return Qnil;
+  }
+
+  char type = 'n';
+  for (int i = 0; i < argc; i++) {
+    VALUE arg = argv[i];
+    if (RB_TYPE_P(arg, T_ARRAY)) {
+      arg = rb_funcall(numo_cNArray, rb_intern("asarray"), 1, arg);
+    }
+    if (CLASS_OF(arg) == numo_cBit || CLASS_OF(arg) == numo_cInt64 || CLASS_OF(arg) == numo_cInt32 ||
+        CLASS_OF(arg) == numo_cInt16 || CLASS_OF(arg) == numo_cInt8 || CLASS_OF(arg) == numo_cUInt64 ||
+        CLASS_OF(arg) == numo_cUInt32 || CLASS_OF(arg) == numo_cUInt16 || CLASS_OF(arg) == numo_cUInt8) {
+      if (type == 'n') {
+        type = 'd';
+      }
+    } else if (CLASS_OF(arg) == numo_cDFloat) {
+      if (type == 'c' || type == 'z') {
+        type = 'z';
+      } else {
+        type = 'd';
+      }
+    } else if (CLASS_OF(arg) == numo_cSFloat) {
+      if (type == 'n') {
+        type = 's';
+      }
+    } else if (CLASS_OF(arg) == numo_cDComplex) {
+      type = 'z';
+    } else if (CLASS_OF(arg) == numo_cSComplex) {
+      if (type == 'n' || type == 's') {
+        type = 'c';
+      } else if (type == 'd') {
+        type = 'z';
+      }
+    }
+  }
+
+  if (type == 'n') {
+    rb_raise(rb_eTypeError, "invalid data type for BLAS/LAPACK");
+    return Qnil;
+  }
+
+  return rb_str_new(&type, 1);
+}
+
 extern "C" void Init_tiny_linalg(void) {
   rb_require("numo/narray");
 
   rb_mTinyLinalg = rb_define_module_under(rb_mNumo, "TinyLinalg");
   rb_mTinyLinalgBlas = rb_define_module_under(rb_mTinyLinalg, "Blas");
   rb_mTinyLinalgLapack = rb_define_module_under(rb_mTinyLinalg, "Lapack");
+
+  rb_define_module_function(rb_mTinyLinalg, "blas_char", RUBY_METHOD_FUNC(blas_char), -1);
 
   TinyLinalg::Dot<TinyLinalg::numo_cDFloatId, double, TinyLinalg::DDot>::define_module_function(rb_mTinyLinalgBlas, "ddot");
   TinyLinalg::Dot<TinyLinalg::numo_cSFloatId, float, TinyLinalg::SDot>::define_module_function(rb_mTinyLinalgBlas, "sdot");
