@@ -243,4 +243,14 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
 
     assert(error < 1e-5)
   end
+
+  def test_blas_aliases
+    a = Numo::DComplex.new(3).rand
+    b = Numo::SComplex.new(3).rand
+    error_a = (Numo::NMath.sqrt(a.dot(a.conjugate)) - Numo::TinyLinalg::Blas.znrm2(a)).abs.max
+    error_b = (Numo::NMath.sqrt(b.dot(b.conjugate)) - Numo::TinyLinalg::Blas.cnrm2(b)).abs.max
+
+    assert(error_a < 1e-7)
+    assert(error_b < 1e-5)
+  end
 end

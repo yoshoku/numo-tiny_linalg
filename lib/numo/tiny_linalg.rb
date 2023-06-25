@@ -5,6 +5,18 @@ require_relative 'tiny_linalg/version'
 require_relative 'tiny_linalg/tiny_linalg'
 
 module Numo
+  module TinyLinalg
+    # Numo::TinyLinalg::Blas is wrapper class of BLAS functions.
+    module Blas
+      alias znrm2 dznrm2
+      alias cnrm2 scnrm2
+
+      module_function :znrm2, :cnrm2
+    end
+  end
+end
+
+module Numo
   # Numo::TinyLinalg is a subset library from Numo::Linalg consisting only of methods used in Machine Learning algorithms.
   module TinyLinalg
     module_function
