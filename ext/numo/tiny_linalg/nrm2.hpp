@@ -12,6 +12,18 @@ struct SNrm2 {
   }
 };
 
+struct DZNrm2 {
+  double call(const int n, const void* x, const int incx) {
+    return cblas_dznrm2(n, x, incx);
+  }
+};
+
+struct SCNrm2 {
+  double call(const int n, const void* x, const int incx) {
+    return cblas_scnrm2(n, x, incx);
+  }
+};
+
 template <int nary_dtype_id, typename dtype, class BlasFn>
 class Nrm2 {
 public:
