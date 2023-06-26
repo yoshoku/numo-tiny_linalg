@@ -12,15 +12,11 @@ VALUE rb_mTinyLinalg;
 VALUE rb_mTinyLinalgBlas;
 VALUE rb_mTinyLinalgLapack;
 
-static VALUE blas_char(int argc, VALUE* argv, VALUE self) {
-  if (argc < 1) {
-    rb_raise(rb_eTypeError, "invalid data type for BLAS/LAPACK");
-    return Qnil;
-  }
-
+char blas_char(VALUE nary_arr) {
   char type = 'n';
-  for (int i = 0; i < argc; i++) {
-    VALUE arg = argv[i];
+  const size_t n = RARRAY_LEN(nary_arr);
+  for (size_t i = 0; i < n; i++) {
+    VALUE arg = rb_ary_entry(nary_arr, i);
     if (RB_TYPE_P(arg, T_ARRAY)) {
       arg = rb_funcall(numo_cNArray, rb_intern("asarray"), 1, arg);
     }
@@ -50,7 +46,14 @@ static VALUE blas_char(int argc, VALUE* argv, VALUE self) {
       }
     }
   }
+  return type;
+}
 
+static VALUE tiny_linalg_blas_char(int argc, VALUE* argv, VALUE self) {
+  VALUE nary_arr = Qnil;
+  rb_scan_args(argc, argv, "*", &nary_arr);
+
+  const char type = blas_char(nary_arr);
   if (type == 'n') {
     rb_raise(rb_eTypeError, "invalid data type for BLAS/LAPACK");
     return Qnil;
@@ -66,7 +69,7 @@ extern "C" void Init_tiny_linalg(void) {
   rb_mTinyLinalgBlas = rb_define_module_under(rb_mTinyLinalg, "Blas");
   rb_mTinyLinalgLapack = rb_define_module_under(rb_mTinyLinalg, "Lapack");
 
-  rb_define_module_function(rb_mTinyLinalg, "blas_char", RUBY_METHOD_FUNC(blas_char), -1);
+  rb_define_module_function(rb_mTinyLinalg, "blas_char", RUBY_METHOD_FUNC(tiny_linalg_blas_char), -1);
 
   TinyLinalg::Dot<TinyLinalg::numo_cDFloatId, double, TinyLinalg::DDot>::define_module_function(rb_mTinyLinalgBlas, "ddot");
   TinyLinalg::Dot<TinyLinalg::numo_cSFloatId, float, TinyLinalg::SDot>::define_module_function(rb_mTinyLinalgBlas, "sdot");
