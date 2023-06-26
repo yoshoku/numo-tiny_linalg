@@ -8,6 +8,8 @@
 #include <lapacke.h>
 #endif
 
+#include <string>
+
 #include <cstring>
 
 #include <ruby.h>

@@ -62,6 +62,42 @@ static VALUE tiny_linalg_blas_char(int argc, VALUE* argv, VALUE self) {
   return rb_str_new(&type, 1);
 }
 
+static VALUE tiny_linalg_blas_call(int argc, VALUE* argv, VALUE self) {
+  VALUE fn_name = Qnil;
+  VALUE nary_arr = Qnil;
+  VALUE kw_args = Qnil;
+  rb_scan_args(argc, argv, "1*:", &fn_name, &nary_arr, &kw_args);
+
+  const char type = blas_char(nary_arr);
+  if (type == 'n') {
+    rb_raise(rb_eTypeError, "invalid data type for BLAS/LAPACK");
+    return Qnil;
+  }
+
+  std::string type_str{ type };
+  std::string fn_str = type_str + std::string(rb_id2name(rb_to_id(rb_to_symbol(fn_name))));
+  ID fn_id = rb_intern(fn_str.c_str());
+  size_t n = RARRAY_LEN(nary_arr);
+  VALUE ret = Qnil;
+
+  if (NIL_P(kw_args)) {
+    VALUE* args = ALLOCA_N(VALUE, n);
+    for (size_t i = 0; i < n; i++) {
+      args[i] = rb_ary_entry(nary_arr, i);
+    }
+    ret = rb_funcallv(self, fn_id, n, args);
+  } else {
+    VALUE* args = ALLOCA_N(VALUE, n + 1);
+    for (size_t i = 0; i < n; i++) {
+      args[i] = rb_ary_entry(nary_arr, i);
+    }
+    args[n] = kw_args;
+    ret = rb_funcallv_kw(self, fn_id, n + 1, args, RB_PASS_KEYWORDS);
+  }
+
+  return ret;
+}
+
 extern "C" void Init_tiny_linalg(void) {
   rb_require("numo/narray");
 
@@ -70,6 +106,7 @@ extern "C" void Init_tiny_linalg(void) {
   rb_mTinyLinalgLapack = rb_define_module_under(rb_mTinyLinalg, "Lapack");
 
   rb_define_module_function(rb_mTinyLinalg, "blas_char", RUBY_METHOD_FUNC(tiny_linalg_blas_char), -1);
+  rb_define_singleton_method(rb_mTinyLinalgBlas, "call", RUBY_METHOD_FUNC(tiny_linalg_blas_call), -1);
 
   TinyLinalg::Dot<TinyLinalg::numo_cDFloatId, double, TinyLinalg::DDot>::define_module_function(rb_mTinyLinalgBlas, "ddot");
   TinyLinalg::Dot<TinyLinalg::numo_cSFloatId, float, TinyLinalg::SDot>::define_module_function(rb_mTinyLinalgBlas, "sdot");

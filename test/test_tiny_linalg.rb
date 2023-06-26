@@ -253,4 +253,19 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert(error_a < 1e-7)
     assert(error_b < 1e-5)
   end
+
+  def test_blas_call
+    assert_equal 32, Numo::TinyLinalg::Blas.call(:dot, Numo::DFloat[1, 2, 3], Numo::DFloat[4, 5, 6])
+    assert_equal 32, Numo::TinyLinalg::Blas.call(:dot, Numo::SFloat[1, 2, 3], Numo::SFloat[4, 5, 6])
+    assert_equal Complex(18, 43), Numo::TinyLinalg::Blas.call(
+      :dotu,
+      Numo::DComplex[Complex(1, 0), Complex(2, 1), Complex(3, 2)],
+      Numo::DComplex[Complex(4, 3), Complex(5, 4), Complex(6, 5)]
+    )
+    assert_equal Complex(18, 43), Numo::TinyLinalg::Blas.call(
+      :dotu,
+      Numo::SComplex[Complex(1, 0), Complex(2, 1), Complex(3, 2)],
+      Numo::SComplex[Complex(4, 3), Complex(5, 4), Complex(6, 5)]
+    )
+  end
 end
