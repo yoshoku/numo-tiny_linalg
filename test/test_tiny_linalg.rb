@@ -268,4 +268,20 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
       Numo::SComplex[Complex(4, 3), Complex(5, 4), Complex(6, 5)]
     )
   end
+
+  def test_dot
+    a = Numo::DFloat.new(3).rand
+    b = Numo::SFloat.new(3).rand
+    c = Numo::DFloat.new(3, 2).rand
+    d = Numo::SFloat.new(2, 3).rand
+    error_ab = (a.dot(b) - Numo::TinyLinalg.dot(a, b)).abs
+    error_ac = (a.dot(c) - Numo::TinyLinalg.dot(a, c)).abs.max
+    error_cb = (c.transpose.dot(b) - Numo::TinyLinalg.dot(c.transpose, b)).abs.max
+    error_cd = (c.dot(d) - Numo::TinyLinalg.dot(c, d)).abs.max
+
+    assert(error_ab < 1e-7)
+    assert(error_ac < 1e-7)
+    assert(error_cb < 1e-7)
+    assert(error_cd < 1e-7)
+  end
 end

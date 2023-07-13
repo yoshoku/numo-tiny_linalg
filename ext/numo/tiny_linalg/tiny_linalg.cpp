@@ -98,6 +98,82 @@ static VALUE tiny_linalg_blas_call(int argc, VALUE* argv, VALUE self) {
   return ret;
 }
 
+static VALUE tiny_linalg_dot(VALUE self, VALUE a_, VALUE b_) {
+  VALUE a = IsNArray(a_) ? a_ : rb_funcall(numo_cNArray, rb_intern("asarray"), 1, a_);
+  VALUE b = IsNArray(b_) ? b_ : rb_funcall(numo_cNArray, rb_intern("asarray"), 1, b_);
+
+  VALUE arg_arr = rb_ary_new3(2, a, b);
+  const char type = blas_char(arg_arr);
+  if (type == 'n') {
+    rb_raise(rb_eTypeError, "invalid data type for BLAS/LAPACK");
+    return Qnil;
+  }
+
+  VALUE ret = Qnil;
+  narray_t* a_nary = NULL;
+  narray_t* b_nary = NULL;
+  GetNArray(a, a_nary);
+  GetNArray(b, b_nary);
+  const int a_ndim = NA_NDIM(a_nary);
+  const int b_ndim = NA_NDIM(b_nary);
+
+  if (a_ndim == 1) {
+    if (b_ndim == 1) {
+      ID fn_id = type == 'c' || type == 'z' ? rb_intern("dotu") : rb_intern("dot");
+      ret = rb_funcall(rb_mTinyLinalgBlas, rb_intern("call"), 3, ID2SYM(fn_id), a, b);
+    } else {
+      VALUE kw_args = rb_hash_new();
+      if (!RTEST(nary_check_contiguous(b)) && RTEST(rb_funcall(b, rb_intern("fortran_contiguous?"), 0))) {
+        b = rb_funcall(b, rb_intern("transpose"), 0);
+        rb_hash_aset(kw_args, ID2SYM(rb_intern("trans")), rb_str_new_cstr("N"));
+      } else {
+        rb_hash_aset(kw_args, ID2SYM(rb_intern("trans")), rb_str_new_cstr("T"));
+      }
+      char fn_name[] = "xgemv";
+      fn_name[0] = type;
+      VALUE argv[3] = { b, a, kw_args };
+      ret = rb_funcallv_kw(rb_mTinyLinalgBlas, rb_intern(fn_name), 3, argv, RB_PASS_KEYWORDS);
+    }
+  } else {
+    if (b_ndim == 1) {
+      VALUE kw_args = rb_hash_new();
+      if (!RTEST(nary_check_contiguous(a)) && RTEST(rb_funcall(b, rb_intern("fortran_contiguous?"), 0))) {
+        a = rb_funcall(a, rb_intern("transpose"), 0);
+        rb_hash_aset(kw_args, ID2SYM(rb_intern("trans")), rb_str_new_cstr("T"));
+      } else {
+        rb_hash_aset(kw_args, ID2SYM(rb_intern("trans")), rb_str_new_cstr("N"));
+      }
+      char fn_name[] = "xgemv";
+      fn_name[0] = type;
+      VALUE argv[3] = { a, b, kw_args };
+      ret = rb_funcallv_kw(rb_mTinyLinalgBlas, rb_intern(fn_name), 3, argv, RB_PASS_KEYWORDS);
+    } else {
+      VALUE kw_args = rb_hash_new();
+      if (!RTEST(nary_check_contiguous(a)) && RTEST(rb_funcall(b, rb_intern("fortran_contiguous?"), 0))) {
+        a = rb_funcall(a, rb_intern("transpose"), 0);
+        rb_hash_aset(kw_args, ID2SYM(rb_intern("transa")), rb_str_new_cstr("T"));
+      } else {
+        rb_hash_aset(kw_args, ID2SYM(rb_intern("transa")), rb_str_new_cstr("N"));
+      }
+      if (!RTEST(nary_check_contiguous(b)) && RTEST(rb_funcall(b, rb_intern("fortran_contiguous?"), 0))) {
+        b = rb_funcall(b, rb_intern("transpose"), 0);
+        rb_hash_aset(kw_args, ID2SYM(rb_intern("transb")), rb_str_new_cstr("T"));
+      } else {
+        rb_hash_aset(kw_args, ID2SYM(rb_intern("transb")), rb_str_new_cstr("N"));
+      }
+      char fn_name[] = "xgemm";
+      fn_name[0] = type;
+      VALUE argv[3] = { a, b, kw_args };
+      ret = rb_funcallv_kw(rb_mTinyLinalgBlas, rb_intern(fn_name), 3, argv, RB_PASS_KEYWORDS);
+    }
+  }
+
+  RB_GC_GUARD(a);
+  RB_GC_GUARD(b);
+
+  return ret;
+}
+
 extern "C" void Init_tiny_linalg(void) {
   rb_require("numo/narray");
 
@@ -106,6 +182,7 @@ extern "C" void Init_tiny_linalg(void) {
   rb_mTinyLinalgLapack = rb_define_module_under(rb_mTinyLinalg, "Lapack");
 
   rb_define_module_function(rb_mTinyLinalg, "blas_char", RUBY_METHOD_FUNC(tiny_linalg_blas_char), -1);
+  rb_define_module_function(rb_mTinyLinalg, "dot", RUBY_METHOD_FUNC(tiny_linalg_dot), 2);
   rb_define_singleton_method(rb_mTinyLinalgBlas, "call", RUBY_METHOD_FUNC(tiny_linalg_blas_call), -1);
 
   TinyLinalg::Dot<TinyLinalg::numo_cDFloatId, double, TinyLinalg::DDot>::define_module_function(rb_mTinyLinalgBlas, "ddot");
