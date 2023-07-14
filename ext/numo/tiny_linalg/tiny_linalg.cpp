@@ -177,12 +177,48 @@ static VALUE tiny_linalg_dot(VALUE self, VALUE a_, VALUE b_) {
 extern "C" void Init_tiny_linalg(void) {
   rb_require("numo/narray");
 
+  /**
+   * Document-module: Numo::TinyLinalg
+   * Numo::TinyLinalg is a subset library from Numo::Linalg consisting only of methods used in Machine Learning algorithms.
+   */
   rb_mTinyLinalg = rb_define_module_under(rb_mNumo, "TinyLinalg");
+  /**
+   * Document-module: Numo::TinyLinalg::Blas
+   * Numo::TinyLinalg::Blas is wrapper module of BLAS functions.
+   */
   rb_mTinyLinalgBlas = rb_define_module_under(rb_mTinyLinalg, "Blas");
+  /**
+   * Document-module: Numo::TinyLinalg::Lapack
+   * Numo::TinyLinalg::Lapack is wrapper module of LAPACK functions.
+   */
   rb_mTinyLinalgLapack = rb_define_module_under(rb_mTinyLinalg, "Lapack");
 
+  /**
+   * Returns BLAS char ([sdcz]) defined by data-type of arguments.
+   *
+   * @overload blas_char(a, ...) -> String
+   *   @param [Numo::NArray] a
+   *   @return [String]
+   */
   rb_define_module_function(rb_mTinyLinalg, "blas_char", RUBY_METHOD_FUNC(tiny_linalg_blas_char), -1);
+  /**
+   * Calculates dot product of two vectors / matrices.
+   *
+   * @overload dot(a, b) -> [Float|Complex|Numo::NArray]
+   *   @param [Numo::NArray] a
+   *   @param [Numo::NArray] b
+   *   @return [Float|Complex|Numo::NArray]
+   */
   rb_define_module_function(rb_mTinyLinalg, "dot", RUBY_METHOD_FUNC(tiny_linalg_dot), 2);
+  /**
+   * Calls BLAS function prefixed with BLAS char.
+   *
+   * @overload call(func, *args)
+   *   @param func [Symbol] BLAS function name without BLAS char.
+   *   @param args arguments of BLAS function.
+   * @example
+   *   Numo::TinyLinalg::Blas.call(:gemv, a, b)
+   */
   rb_define_singleton_method(rb_mTinyLinalgBlas, "call", RUBY_METHOD_FUNC(tiny_linalg_blas_call), -1);
 
   TinyLinalg::Dot<TinyLinalg::numo_cDFloatId, double, TinyLinalg::DDot>::define_module_function(rb_mTinyLinalgBlas, "ddot");
@@ -209,4 +245,7 @@ extern "C" void Init_tiny_linalg(void) {
   TinyLinalg::GESDD<TinyLinalg::numo_cSFloatId, TinyLinalg::numo_cSFloatId, float, float, TinyLinalg::SGESDD>::define_module_function(rb_mTinyLinalgLapack, "sgesdd");
   TinyLinalg::GESDD<TinyLinalg::numo_cDComplexId, TinyLinalg::numo_cDFloatId, lapack_complex_double, double, TinyLinalg::ZGESDD>::define_module_function(rb_mTinyLinalgLapack, "zgesdd");
   TinyLinalg::GESDD<TinyLinalg::numo_cSComplexId, TinyLinalg::numo_cSFloatId, lapack_complex_float, float, TinyLinalg::CGESDD>::define_module_function(rb_mTinyLinalgLapack, "cgesdd");
+
+  rb_define_alias(rb_singleton_class(rb_mTinyLinalgBlas), "znrm2", "dznrm2");
+  rb_define_alias(rb_singleton_class(rb_mTinyLinalgBlas), "cnrm2", "scnrm2");
 }

@@ -4,23 +4,18 @@ require 'numo/narray'
 require_relative 'tiny_linalg/version'
 require_relative 'tiny_linalg/tiny_linalg'
 
-module Numo
-  module TinyLinalg
-    # Numo::TinyLinalg::Blas is wrapper class of BLAS functions.
-    module Blas
-      alias znrm2 dznrm2
-      alias cnrm2 scnrm2
-
-      module_function :znrm2, :cnrm2
-    end
-  end
-end
-
+# Ruby/Numo (NUmerical MOdules)
 module Numo
   # Numo::TinyLinalg is a subset library from Numo::Linalg consisting only of methods used in Machine Learning algorithms.
   module TinyLinalg
     module_function
 
+    # Calculates the Singular Value Decomposition (SVD) of a matrix: `A = U * S * V^T`
+    #
+    # @param a [Numo::NArray] Matrix to be decomposed.
+    # @param driver [String] LAPACK driver to be used ('svd' or 'sdd').
+    # @param job [String] Job option ('A', 'S', or 'N').
+    # @return [Array<Numo::NArray>] Singular values and singular vectors ([s, u, vt]).
     def svd(a, driver: 'svd', job: 'A')
       raise ArgumentError, "invalid job: #{job}" unless /^[ASN]/i.match?(job.to_s)
 
