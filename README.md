@@ -1,5 +1,6 @@
 # Numo::TinyLinalg
 
+[![Gem Version](https://badge.fury.io/rb/numo-tiny_linalg.svg)](https://badge.fury.io/rb/numo-tiny_linalg)
 [![Build Status](https://github.com/yoshoku/numo-tiny_linalg/actions/workflows/main.yml/badge.svg)](https://github.com/yoshoku/numo-tiny_linalg/actions/workflows/main.yml)
 [![BSD 3-Clause License](https://img.shields.io/badge/License-BSD%203--Clause-orange.svg)](https://github.com/yoshoku/numo-tiny_linalg/blob/main/LICENSE.txt)
 
