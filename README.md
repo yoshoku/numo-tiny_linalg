@@ -59,6 +59,8 @@ An example of singular value decomposition.
 ```ruby
 require 'numo/tiny_linalg'
 
+Numo::Linalg = Numo::TinyLinalg unless defined?(Numo::Linalg)
+
 x = Numo::DFloat.new(5, 2).rand.dot(Numo::DFloat.new(2, 3).rand)
 # =>
 # Numo::DFloat#shape=[5,3]
@@ -68,7 +70,7 @@ x = Numo::DFloat.new(5, 2).rand.dot(Numo::DFloat.new(2, 3).rand)
 #  [0.67085, 0.102594, 0.600882],
 #  [0.404631, 0.116868, 0.46644]]
 
-s, u, vt = Numo::TinyLinalg.svd(x, job: 'S')
+s, u, vt = Numo::Linalg.svd(x, job: 'S')
 
 z = u.dot(s.diag).dot(vt)
 # =>
