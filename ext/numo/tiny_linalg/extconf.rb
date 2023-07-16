@@ -31,11 +31,6 @@ end
 abort 'libstdc++ is not found.' unless have_library('stdc++')
 $CXXFLAGS << ' -std=c++11'
 
-if RUBY_PLATFORM.include?('darwin') && Gem::Version.new('3.1.0') <= Gem::Version.new(RUBY_VERSION) &&
-   try_link('int main(void){return 0;}', '-Wl,-undefined,dynamic_lookup')
-  $LDFLAGS << ' -Wl,-undefined,dynamic_lookup'
-end
-
 # NOTE: Accelerate framework does not support LAPACKE.
 # use_accelerate = false
 # if RUBY_PLATFORM.include?('darwin') && have_framework('Accelerate')
@@ -44,7 +39,10 @@ end
 # end
 
 build_openblas = false
-build_openblas = true unless have_library('openblas')
+unless find_library('openblas', 'LAPACKE_dsyevr')
+  build_openblas = true unless have_library('openblas')
+  build_openblas = true unless have_library('lapacke')
+end
 build_openblas = true unless have_header('cblas.h')
 build_openblas = true unless have_header('lapacke.h')
 build_openblas = true unless have_header('openblas_config.h')
@@ -95,5 +93,10 @@ if build_openblas
 end
 
 $CFLAGS << ' -DNUMO_TINY_LINALG_USE_OPENBLAS'
+
+if RUBY_PLATFORM.include?('darwin') && Gem::Version.new('3.1.0') <= Gem::Version.new(RUBY_VERSION) &&
+   try_link('int main(void){return 0;}', '-Wl,-undefined,dynamic_lookup')
+  $LDFLAGS << ' -Wl,-undefined,dynamic_lookup'
+end
 
 create_makefile('numo/tiny_linalg/tiny_linalg')
