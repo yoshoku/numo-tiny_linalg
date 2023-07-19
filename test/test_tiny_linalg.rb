@@ -108,7 +108,7 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
 
   def test_svd
     x = Numo::DFloat.new(5, 3).rand.dot(Numo::DFloat.new(3, 2).rand)
-    s, u, vt, = Numo::TinyLinalg.svd(x.dup, driver: 'sdd', job: 'S')
+    s, u, vt, = Numo::TinyLinalg.svd(x, driver: 'sdd', job: 'S')
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
