@@ -1,12 +1,12 @@
 #include "tiny_linalg.hpp"
+#include "blas/dot.hpp"
+#include "blas/dot_sub.hpp"
+#include "blas/gemm.hpp"
+#include "blas/gemv.hpp"
+#include "blas/nrm2.hpp"
 #include "converter.hpp"
-#include "dot.hpp"
-#include "dot_sub.hpp"
-#include "gemm.hpp"
-#include "gemv.hpp"
-#include "gesdd.hpp"
-#include "gesvd.hpp"
-#include "nrm2.hpp"
+#include "lapack/gesdd.hpp"
+#include "lapack/gesvd.hpp"
 
 VALUE rb_mTinyLinalg;
 VALUE rb_mTinyLinalgBlas;
