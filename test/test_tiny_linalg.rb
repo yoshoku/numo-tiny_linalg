@@ -34,6 +34,34 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def test_lapack_dgesv
+    a = Numo::DFloat.new(5, 5).rand
+    b = Numo::DFloat.new(5).rand
+    c = Numo::DFloat.new(5, 5).rand
+    d = Numo::DFloat.new(5, 3).rand
+    ret_ab = Numo::TinyLinalg::Lapack.dgesv(a.dup, b.dup)
+    ret_cd = Numo::TinyLinalg::Lapack.dgesv(c.dup, d.dup)
+    error_ab = (b - a.dot(ret_ab[1])).abs.max
+    error_cd = (d - c.dot(ret_cd[1])).abs.max
+
+    assert(error_ab < 1e-7)
+    assert(error_cd < 1e-7)
+  end
+
+  def test_lapack_sgesv
+    a = Numo::SFloat.new(3, 3).rand
+    b = Numo::SFloat.new(3).rand
+    c = Numo::SFloat.new(3, 3).rand
+    d = Numo::SFloat.new(3, 5).rand
+    ret_ab = Numo::TinyLinalg::Lapack.sgesv(a.dup, b.dup)
+    ret_cd = Numo::TinyLinalg::Lapack.sgesv(c.dup, d.dup)
+    error_ab = (b - a.dot(ret_ab[1])).abs.max
+    error_cd = (d - c.dot(ret_cd[1])).abs.max
+
+    assert(error_ab < 1e-5)
+    assert(error_cd < 1e-5)
+  end
+
   def test_lapack_dgesvd
     x = Numo::DFloat.new(5, 3).rand.dot(Numo::DFloat.new(3, 2).rand)
     s, u, vt, = Numo::TinyLinalg::Lapack.dgesvd(x.dup, jobu: 'S', jobvt: 'S')
