@@ -240,6 +240,8 @@ extern "C" void Init_tiny_linalg(void) {
   TinyLinalg::Nrm2<TinyLinalg::numo_cSComplexId, float, TinyLinalg::SCNrm2>::define_module_function(rb_mTinyLinalgBlas, "scnrm2");
   TinyLinalg::GESV<TinyLinalg::numo_cDFloatId, double, TinyLinalg::DGESV>::define_module_function(rb_mTinyLinalgLapack, "dgesv");
   TinyLinalg::GESV<TinyLinalg::numo_cSFloatId, float, TinyLinalg::SGESV>::define_module_function(rb_mTinyLinalgLapack, "sgesv");
+  TinyLinalg::GESV<TinyLinalg::numo_cDComplexId, lapack_complex_double, TinyLinalg::ZGESV>::define_module_function(rb_mTinyLinalgLapack, "zgesv");
+  TinyLinalg::GESV<TinyLinalg::numo_cSComplexId, lapack_complex_float, TinyLinalg::CGESV>::define_module_function(rb_mTinyLinalgLapack, "cgesv");
   TinyLinalg::GESVD<TinyLinalg::numo_cDFloatId, TinyLinalg::numo_cDFloatId, double, double, TinyLinalg::DGESVD>::define_module_function(rb_mTinyLinalgLapack, "dgesvd");
   TinyLinalg::GESVD<TinyLinalg::numo_cSFloatId, TinyLinalg::numo_cSFloatId, float, float, TinyLinalg::SGESVD>::define_module_function(rb_mTinyLinalgLapack, "sgesvd");
   TinyLinalg::GESVD<TinyLinalg::numo_cDComplexId, TinyLinalg::numo_cDFloatId, lapack_complex_double, double, TinyLinalg::ZGESVD>::define_module_function(rb_mTinyLinalgLapack, "zgesvd");

@@ -16,6 +16,22 @@ struct SGESV {
   }
 };
 
+struct ZGESV {
+  lapack_int call(int matrix_layout, lapack_int n, lapack_int nrhs,
+                  lapack_complex_double* a, lapack_int lda, lapack_int* ipiv,
+                  lapack_complex_double* b, lapack_int ldb) {
+    return LAPACKE_zgesv(matrix_layout, n, nrhs, a, lda, ipiv, b, ldb);
+  }
+};
+
+struct CGESV {
+  lapack_int call(int matrix_layout, lapack_int n, lapack_int nrhs,
+                  lapack_complex_float* a, lapack_int lda, lapack_int* ipiv,
+                  lapack_complex_float* b, lapack_int ldb) {
+    return LAPACKE_cgesv(matrix_layout, n, nrhs, a, lda, ipiv, b, ldb);
+  }
+};
+
 template <int nary_dtype_id, typename DType, typename FncType>
 class GESV {
 public:
