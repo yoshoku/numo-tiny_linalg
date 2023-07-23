@@ -41,7 +41,7 @@ public:
 
 private:
   struct gesv_opt {
-    lapack_int matrix_layout;
+    int matrix_layout;
   };
 
   static void iter_gesv(na_loop_t* const lp) {
@@ -71,7 +71,7 @@ private:
 
     rb_get_kwargs(kw_args, kw_table, 0, 1, kw_values);
 
-    const lapack_int matrix_layout = kw_values[0] != Qundef ? get_matrix_layout(kw_values[0]) : LAPACK_ROW_MAJOR;
+    const int matrix_layout = kw_values[0] != Qundef ? get_matrix_layout(kw_values[0]) : LAPACK_ROW_MAJOR;
 
     if (CLASS_OF(a_vnary) != nary_dtype) {
       a_vnary = rb_funcall(nary_dtype, rb_intern("cast"), 1, a_vnary);
@@ -116,7 +116,7 @@ private:
     gesv_opt opt = { matrix_layout };
     VALUE res = na_ndloop3(&ndf, &opt, 2, a_vnary, b_vnary);
 
-    VALUE ret = rb_ary_new3(3, a_vnary, b_vnary, res);
+    VALUE ret = rb_ary_concat(rb_assoc_new(a_vnary, b_vnary), res);
 
     RB_GC_GUARD(a_vnary);
     RB_GC_GUARD(b_vnary);
