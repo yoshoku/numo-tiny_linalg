@@ -10,6 +10,26 @@ module Numo
   module TinyLinalg
     module_function
 
+    # Solves linear equation `A * x = b` or `A * X = B` for `x` from square matrix `a`.
+    #
+    # @param a [Numo::NArray] The n-by-n square matrix  (>= 2-dimensinal NArray).
+    # @param b [Numo::NArray] The n right-hand side vector, or n-by-nrhs right-hand side matrix (>= 1-dimensinal NArray).
+    # @param driver [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
+    # @param uplo [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
+    # @return [Numo::NArray] The solusion vector / matrix `x`.
+    def solve(a, b, driver: 'gen', uplo: 'U') # rubocop:disable Lint/UnusedMethodArgument
+      case blas_char(a, b)
+      when 'd'
+        Lapack.dgesv(a.dup, b.dup)[1]
+      when 's'
+        Lapack.sgesv(a.dup, b.dup)[1]
+      when 'z'
+        Lapack.zgesv(a.dup, b.dup)[1]
+      when 'c'
+        Lapack.cgesv(a.dup, b.dup)[1]
+      end
+    end
+
     # Calculates the Singular Value Decomposition (SVD) of a matrix: `A = U * S * V^T`
     #
     # @param a [Numo::NArray] Matrix to be decomposed.
