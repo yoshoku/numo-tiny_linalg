@@ -188,6 +188,32 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert(error < 1e-5)
   end
 
+  def test_lapack_zgetrf
+    nr = 3
+    nc = 2
+    a = Numo::DComplex.new(nr, nc).rand
+    lu, piv, = Numo::TinyLinalg::Lapack.zgetrf(a.dup)
+    l = lu.tril.tap { |m| m[m.diag_indices] = 1 }
+    u = lu.triu[0...nc, 0...nc]
+    pm = Numo::DComplex.eye(nr).tap { |m| piv.each_with_index { |v, i| m[true, [v - 1, i]] = m[true, [i, v - 1]].dup } }
+    error = (a - pm.dot(l).dot(u)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_cgetrf
+    nr = 3
+    nc = 2
+    a = Numo::SComplex.new(nr, nc).rand
+    lu, piv, = Numo::TinyLinalg::Lapack.cgetrf(a.dup)
+    l = lu.tril.tap { |m| m[m.diag_indices] = 1 }
+    u = lu.triu[0...nc, 0...nc]
+    pm = Numo::SComplex.eye(nr).tap { |m| piv.each_with_index { |v, i| m[true, [v - 1, i]] = m[true, [i, v - 1]].dup } }
+    error = (a - pm.dot(l).dot(u)).abs.max
+
+    assert(error < 1e-5)
+  end
+
   def test_solve
     a = Numo::DComplex.new(3, 3).rand
     b = Numo::SFloat.new(3).rand

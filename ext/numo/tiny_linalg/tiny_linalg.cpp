@@ -253,6 +253,8 @@ extern "C" void Init_tiny_linalg(void) {
   TinyLinalg::GESDD<TinyLinalg::numo_cSComplexId, TinyLinalg::numo_cSFloatId, lapack_complex_float, float, TinyLinalg::CGESDD>::define_module_function(rb_mTinyLinalgLapack, "cgesdd");
   TinyLinalg::GETRF<TinyLinalg::numo_cDFloatId, double, TinyLinalg::DGETRF>::define_module_function(rb_mTinyLinalgLapack, "dgetrf");
   TinyLinalg::GETRF<TinyLinalg::numo_cSFloatId, float, TinyLinalg::SGETRF>::define_module_function(rb_mTinyLinalgLapack, "sgetrf");
+  TinyLinalg::GETRF<TinyLinalg::numo_cDComplexId, lapack_complex_double, TinyLinalg::ZGETRF>::define_module_function(rb_mTinyLinalgLapack, "zgetrf");
+  TinyLinalg::GETRF<TinyLinalg::numo_cSComplexId, lapack_complex_float, TinyLinalg::CGETRF>::define_module_function(rb_mTinyLinalgLapack, "cgetrf");
 
   rb_define_alias(rb_singleton_class(rb_mTinyLinalgBlas), "znrm2", "dznrm2");
   rb_define_alias(rb_singleton_class(rb_mTinyLinalgBlas), "cnrm2", "scnrm2");

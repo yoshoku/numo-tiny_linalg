@@ -14,6 +14,20 @@ struct SGETRF {
   }
 };
 
+struct ZGETRF {
+  lapack_int call(int matrix_layout, lapack_int m, lapack_int n,
+                  lapack_complex_double* a, lapack_int lda, lapack_int* ipiv) {
+    return LAPACKE_zgetrf(matrix_layout, m, n, a, lda, ipiv);
+  }
+};
+
+struct CGETRF {
+  lapack_int call(int matrix_layout, lapack_int m, lapack_int n,
+                  lapack_complex_float* a, lapack_int lda, lapack_int* ipiv) {
+    return LAPACKE_cgetrf(matrix_layout, m, n, a, lda, ipiv);
+  }
+};
+
 template <int nary_dtype_id, typename DType, typename FncType>
 class GETRF {
 public:
