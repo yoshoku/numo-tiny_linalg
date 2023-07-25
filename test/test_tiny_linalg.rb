@@ -214,6 +214,26 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert(error < 1e-5)
   end
 
+  def test_lapack_dgetri
+    n = 3
+    a = Numo::DFloat.new(n, n).rand - 0.5
+    lu, piv, = Numo::TinyLinalg::Lapack.dgetrf(a.dup)
+    a_inv, = Numo::TinyLinalg::Lapack.dgetri(lu, piv)
+    error = (Numo::DFloat.eye(n) - a_inv.dot(a)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_sgetri
+    n = 3
+    a = Numo::SFloat.new(n, n).rand - 0.5
+    lu, piv, = Numo::TinyLinalg::Lapack.sgetrf(a.dup)
+    a_inv, = Numo::TinyLinalg::Lapack.sgetri(lu, piv)
+    error = (Numo::SFloat.eye(n) - a_inv.dot(a)).abs.max
+
+    assert(error < 1e-5)
+  end
+
   def test_solve
     a = Numo::DComplex.new(3, 3).rand
     b = Numo::SFloat.new(3).rand
