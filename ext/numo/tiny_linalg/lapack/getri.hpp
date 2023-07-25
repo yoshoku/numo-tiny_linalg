@@ -74,9 +74,12 @@ private:
 
     narray_t* a_nary = NULL;
     GetNArray(a_vnary, a_nary);
-    const int n_dims = NA_NDIM(a_nary);
-    if (n_dims != 2) {
+    if (NA_NDIM(a_nary) != 2) {
       rb_raise(rb_eArgError, "input array a must be 2-dimensional");
+      return Qnil;
+    }
+    if (NA_SHAPE(a_nary)[0] != NA_SHAPE(a_nary)[1]) {
+      rb_raise(rb_eArgError, "input array a must be square");
       return Qnil;
     }
     narray_t* ipiv_nary = NULL;
