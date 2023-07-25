@@ -12,6 +12,18 @@ struct SGETRI {
   }
 };
 
+struct ZGETRI {
+  lapack_int call(int matrix_layout, lapack_int n, lapack_complex_double* a, lapack_int lda, const lapack_int* ipiv) {
+    return LAPACKE_zgetri(matrix_layout, n, a, lda, ipiv);
+  }
+};
+
+struct CGETRI {
+  lapack_int call(int matrix_layout, lapack_int n, lapack_complex_float* a, lapack_int lda, const lapack_int* ipiv) {
+    return LAPACKE_cgetri(matrix_layout, n, a, lda, ipiv);
+  }
+};
+
 template <int nary_dtype_id, typename DType, typename FncType>
 class GETRI {
 public:
