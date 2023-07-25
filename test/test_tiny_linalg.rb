@@ -177,11 +177,11 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
 
   def test_lapack_sgetrf
     nr = 3
-    nc = 2
+    nc = 5
     a = Numo::SFloat.new(nr, nc).rand
     lu, piv, = Numo::TinyLinalg::Lapack.sgetrf(a.dup)
-    l = lu.tril.tap { |m| m[m.diag_indices] = 1 }
-    u = lu.triu[0...nc, 0...nc]
+    l = lu.tril.tap { |m| m[m.diag_indices] = 1 }[0...nr, 0...nr]
+    u = lu.triu[0...nr, 0...nc]
     pm = Numo::SFloat.eye(nr).tap { |m| piv.each_with_index { |v, i| m[true, [v - 1, i]] = m[true, [i, v - 1]].dup } }
     error = (a - pm.dot(l).dot(u)).abs.max
 

@@ -47,7 +47,7 @@ private:
     getrf_opt* opt = (getrf_opt*)(lp->opt_ptr);
     const lapack_int m = NDL_SHAPE(lp, 0)[0];
     const lapack_int n = NDL_SHAPE(lp, 0)[1];
-    const lapack_int lda = m < n ? m : n;
+    const lapack_int lda = n;
     const lapack_int i = FncType().call(opt->matrix_layout, m, n, a, lda, ipiv);
     *info = static_cast<int>(i);
   }
