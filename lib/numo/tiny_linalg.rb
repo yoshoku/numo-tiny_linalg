@@ -10,6 +10,32 @@ module Numo
   module TinyLinalg
     module_function
 
+    # Computes the inverse matrix of a square matrix.
+    #
+    # @param a [Numo::NArray] n-by-n square matrix.
+    # @param driver [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
+    # @param uplo [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
+    # @return [Numo::NArray] The inverse matrix of `a`.
+    def inv(a, driver: 'getrf', uplo: 'U') # rubocop:disable Lint/UnusedMethodArgument
+      raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
+      raise ArgumentError, 'input array a must be square' if a.shape[0] != a.shape[1]
+
+      bchr = blas_char(a)
+      raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
+
+      getrf = "#{bchr}getrf".to_sym
+      getri = "#{bchr}getri".to_sym
+
+      lu, piv, info = Numo::TinyLinalg::Lapack.send(getrf, a.dup)
+      if info.zero?
+        Numo::TinyLinalg::Lapack.send(getri, lu, piv)[0]
+      elsif info.positive?
+        raise 'the factor U is singular, and the inverse matrix could not be computed.'
+      else
+        raise "the #{-info}-th argument of getrf had illegal value"
+      end
+    end
+
     # Solves linear equation `A * x = b` or `A * X = B` for `x` from square matrix `a`.
     #
     # @param a [Numo::NArray] The n-by-n square matrix  (>= 2-dimensinal NArray).

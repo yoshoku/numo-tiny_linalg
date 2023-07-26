@@ -254,6 +254,14 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert(error < 1e-5)
   end
 
+  def test_inv
+    a = Numo::DFloat.new(3, 3).rand - 0.5
+    a_inv = Numo::TinyLinalg.inv(a)
+    error = (Numo::DFloat.eye(3) - a_inv.dot(a)).abs.max
+
+    assert(error < 1e-7)
+  end
+
   def test_solve
     a = Numo::DComplex.new(3, 3).rand
     b = Numo::SFloat.new(3).rand
