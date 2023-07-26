@@ -1,0 +1,2 @@
+lib/**/*.rb
+ext/numo/tiny_linalg/*.cpp
