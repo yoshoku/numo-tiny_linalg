@@ -10,6 +10,32 @@ module Numo
   module TinyLinalg
     module_function
 
+    # Computes the determinant of matrix.
+    #
+    # @param a [Numo::NArray] n-by-n square matrix.
+    # @return [Float/Complex] The determinant of `a`.
+    def det(a)
+      raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
+      raise ArgumentError, 'input array a must be square' if a.shape[0] != a.shape[1]
+
+      bchr = blas_char(a)
+      raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
+
+      getrf = "#{bchr}getrf".to_sym
+      lu, piv, info = Numo::TinyLinalg::Lapack.send(getrf, a.dup)
+
+      if info.zero?
+        det_l = 1
+        det_u = lu.diagonal.prod
+        det_p = piv.map_with_index { |v, i| v == i + 1 ? 1 : -1 }.prod
+        det_l * det_u * det_p
+      elsif info.positive?
+        raise 'the factor U is singular, and the inverse matrix could not be computed.'
+      else
+        raise "the #{-info}-th argument of getrf had illegal value"
+      end
+    end
+
     # Computes the inverse matrix of a square matrix.
     #
     # @param a [Numo::NArray] n-by-n square matrix.
