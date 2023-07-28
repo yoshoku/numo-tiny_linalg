@@ -62,6 +62,21 @@ module Numo
       end
     end
 
+    # Compute the (Moore-Penrose) pseudo-inverse of a matrix using singular value decomposition.
+    #
+    # @param a [Numo::NArray] The m-by-n matrix to be pseudo-inverted.
+    # @param driver [String] LAPACK driver to be used ('svd' or 'sdd').
+    # @param rcond [Float] The threshold value for small singular values of `a`, default value is `a.shape.max * EPS`.
+    # @return [Numo::NArray] The pseudo-inverse of `a`.
+    def pinv(a, driver: 'svd', rcond: nil)
+      s, u, vh = svd(a, driver: driver, job: 'S')
+      rcond = a.shape.max * s.class::EPSILON if rcond.nil?
+      rank = s.gt(rcond * s[0]).count
+
+      u = u[true, 0...rank] / s[0...rank]
+      u.dot(vh[0...rank, true]).conj.transpose
+    end
+
     # Solves linear equation `A * x = b` or `A * X = B` for `x` from square matrix `a`.
     #
     # @param a [Numo::NArray] The n-by-n square matrix  (>= 2-dimensinal NArray).
