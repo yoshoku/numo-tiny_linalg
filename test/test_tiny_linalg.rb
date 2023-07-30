@@ -34,6 +34,29 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def test_lapack_dgeqrf_dorgqr
+    ma = 3
+    na = 2
+    a = Numo::DFloat.new(ma, na).rand
+    qr, tau, = Numo::TinyLinalg::Lapack.dgeqrf(a.dup)
+    r = qr.triu
+    qq = Numo::DFloat.zeros(ma, ma)
+    qq[0...ma, 0...na] = qr
+    q, = Numo::TinyLinalg::Lapack.dorgqr(qq, tau)
+    error_a = (a - q.dot(r)).abs.max
+
+    mb = 2
+    nb = 3
+    b = Numo::DFloat.new(mb, nb).rand
+    qr, tau, = Numo::TinyLinalg::Lapack.dgeqrf(b.dup)
+    r = qr.triu
+    q, = Numo::TinyLinalg::Lapack.dorgqr(qr[true, 0...mb], tau)
+    error_b = (b - q.dot(r)).abs.max
+
+    assert(error_a < 1e-7)
+    assert(error_b < 1e-7)
+  end
+
   def test_lapack_dgesv
     a = Numo::DFloat.new(5, 5).rand
     b = Numo::DFloat.new(5).rand
