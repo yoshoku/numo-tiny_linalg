@@ -7,6 +7,13 @@ struct DOrgQr {
   }
 };
 
+struct SOrgQr {
+  lapack_int call(int matrix_layout, lapack_int m, lapack_int n, lapack_int k,
+                  float* a, lapack_int lda, const float* tau) {
+    return LAPACKE_sorgqr(matrix_layout, m, n, k, a, lda, tau);
+  }
+};
+
 template <int nary_dtype_id, typename DType, typename FncType>
 class OrgQr {
 public:

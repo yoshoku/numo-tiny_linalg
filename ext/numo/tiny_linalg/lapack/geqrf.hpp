@@ -7,6 +7,13 @@ struct DGeQrf {
   }
 };
 
+struct SGeQrf {
+  lapack_int call(int matrix_layout, lapack_int m, lapack_int n,
+                  float* a, lapack_int lda, float* tau) {
+    return LAPACKE_sgeqrf(matrix_layout, m, n, a, lda, tau);
+  }
+};
+
 template <int nary_dtype_id, typename DType, typename FncType>
 class GeQrf {
 public:
