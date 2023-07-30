@@ -14,6 +14,20 @@ struct SGeQrf {
   }
 };
 
+struct ZGeQrf {
+  lapack_int call(int matrix_layout, lapack_int m, lapack_int n,
+                  lapack_complex_double* a, lapack_int lda, lapack_complex_double* tau) {
+    return LAPACKE_zgeqrf(matrix_layout, m, n, a, lda, tau);
+  }
+};
+
+struct CGeQrf {
+  lapack_int call(int matrix_layout, lapack_int m, lapack_int n,
+                  lapack_complex_float* a, lapack_int lda, lapack_complex_float* tau) {
+    return LAPACKE_cgeqrf(matrix_layout, m, n, a, lda, tau);
+  }
+};
+
 template <int nary_dtype_id, typename DType, typename FncType>
 class GeQrf {
 public:
