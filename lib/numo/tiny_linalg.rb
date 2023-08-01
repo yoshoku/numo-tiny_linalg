@@ -7,7 +7,7 @@ require_relative 'tiny_linalg/tiny_linalg'
 # Ruby/Numo (NUmerical MOdules)
 module Numo
   # Numo::TinyLinalg is a subset library from Numo::Linalg consisting only of methods used in Machine Learning algorithms.
-  module TinyLinalg
+  module TinyLinalg # rubocop:disable Metrics/ModuleLength
     module_function
 
     # Computes the determinant of matrix.
@@ -75,6 +75,49 @@ module Numo
 
       u = u[true, 0...rank] / s[0...rank]
       u.dot(vh[0...rank, true]).conj.transpose
+    end
+
+    # Compute QR decomposition of a matrix.
+    #
+    # @param a [Numo::NArray] The m-by-n matrix to be decomposed.
+    # @param mode [String] The mode of decomposition.
+    #   - "reduce"   -- returns both Q [m, m] and R [m, n],
+    #   - "r"        -- returns only R,
+    #   - "economic" -- returns both Q [m, n] and R [n, n],
+    #   - "raw"      -- returns QR and TAU (LAPACK geqrf results).
+    # @return [Numo::NArray] if mode='r'
+    # @return [Array<Numo::NArray,Numo::NArray>] if mode='reduce' or mode='economic'
+    # @return [Array<Numo::NArray,Numo::NArray>] if mode='raw' (LAPACK geqrf result)
+    def qr(a, mode: 'reduce')
+      raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
+      raise ArgumentError, "invalid mode: #{mode}" unless %w[reduce r economic raw].include?(mode)
+
+      bchr = blas_char(a)
+      raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
+
+      geqrf = "#{bchr}geqrf".to_sym
+      qr, tau, = Numo::TinyLinalg::Lapack.send(geqrf, a.dup)
+
+      return [qr, tau] if mode == 'raw'
+
+      m, n = qr.shape
+      r = m > n && %w[economic raw].include?(mode) ? qr[0...n, true].triu : qr.triu
+
+      return r if mode == 'r'
+
+      org_ung_qr = %w[d s].include?(bchr) ? "#{bchr}orgqr".to_sym : "#{bchr}ungqr".to_sym
+
+      q = if m < n
+            Numo::TinyLinalg::Lapack.send(org_ung_qr, qr[true, 0...m], tau)[0]
+          elsif mode == 'economic'
+            Numo::TinyLinalg::Lapack.send(org_ung_qr, qr, tau)[0]
+          else
+            qqr = a.class.zeros(m, m)
+            qqr[0...m, 0...n] = qr
+            Numo::TinyLinalg::Lapack.send(org_ung_qr, qqr, tau)[0]
+          end
+
+      [q, r]
     end
 
     # Solves linear equation `A * x = b` or `A * X = B` for `x` from square matrix `a`.

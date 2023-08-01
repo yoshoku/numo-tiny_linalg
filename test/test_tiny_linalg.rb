@@ -3,6 +3,10 @@
 require 'test_helper'
 
 class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
+  def setup
+    Numo::NArray.srand(Minitest.seed)
+  end
+
   def test_that_it_has_a_version_number
     refute_nil ::Numo::TinyLinalg::VERSION
   end
@@ -344,6 +348,41 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     error = (Numo::DComplex.eye(3) - a_inv.dot(a)).abs.max
 
     assert(error < 1e-7)
+  end
+
+  def test_qr
+    ma = 5
+    na = 3
+    a = Numo::DFloat.new(ma, na).rand - 0.5
+    q, r = Numo::TinyLinalg.qr(a, mode: 'economic')
+    error_a = (a - q.dot(r)).abs.max
+
+    mb = 3
+    nb = 5
+    b = Numo::DFloat.new(mb, nb).rand - 0.5
+    q, r = Numo::TinyLinalg.qr(b, mode: 'economic')
+    error_b = (b - q.dot(r)).abs.max
+
+    mc = 5
+    nc = 3
+    c = Numo::DComplex.new(mc, nc).rand - 0.5
+    q, r = Numo::TinyLinalg.qr(c, mode: 'economic')
+    error_c = (c - q.dot(r)).abs.max
+
+    md = 3
+    nd = 5
+    d = Numo::DComplex.new(md, nd).rand - 0.5
+    q, r = Numo::TinyLinalg.qr(d, mode: 'economic')
+    error_d = (d - q.dot(r)).abs.max
+
+    q, r = Numo::TinyLinalg.qr(a, mode: 'reduce')
+
+    assert(error_a < 1e-7)
+    assert(error_b < 1e-7)
+    assert(error_c < 1e-7)
+    assert(error_d < 1e-7)
+    assert_equal(q.shape, [ma, ma])
+    assert_equal(r.shape, [ma, na])
   end
 
   def test_solve
