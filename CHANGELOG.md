@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+## [[0.0.3](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.0.2...v0.0.3)] - 2023-08-02
+- Add dgeqrf, sgeqrf, zgeqrf, and cgeqrf module functions to TinyLinalg::Lapack.
+- Add dorgqr, sorgqr, zungqr, and cungqr module functions to TinyLinalg::Lapack.
+- Add det module function to TinyLinalg.
+- Add pinv module function to TinyLinalg.
+- Add qr module function to TinyLinalg.
+
 ## [[0.0.2](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.0.1...v0.0.2)] - 2023-07-26
 - Add automatic build of OpenBLAS if it is not found.
 - Add dgesv, sgesv, zgesv, and cgesv module functions to TinyLinalg::Lapack.
