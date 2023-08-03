@@ -327,6 +327,28 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert(error < 1e-5)
   end
 
+  def test_lapack_dsygvd
+    n = 5
+    a = Numo::DFloat.new(n, n).rand - 0.5
+    c = 0.5 * (a.transpose + a)
+    b = Numo::DFloat.eye(n)
+    v, _x, w, _info = Numo::TinyLinalg::Lapack.dsygvd(c.dup, b.dup, itype: 1, jobz: 'V', uplo: 'U')
+    error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_ssygvd
+    n = 5
+    a = Numo::SFloat.new(n, n).rand - 0.5
+    c = 0.5 * (a.transpose + a)
+    b = Numo::SFloat.eye(n)
+    v, _x, w, _info = Numo::TinyLinalg::Lapack.ssygvd(c.dup, b.dup, itype: 1, jobz: 'V', uplo: 'U')
+    error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
+
+    assert(error < 1e-5)
+  end
+
   def test_det
     a = Numo::DFloat[[0, 2, 3], [4, 5, 6], [7, 8, 9]]
     error = (Numo::TinyLinalg.det(a) - 3).abs
