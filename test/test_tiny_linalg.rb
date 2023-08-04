@@ -327,6 +327,60 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert(error < 1e-5)
   end
 
+  def test_lapack_dsygv
+    n = 5
+    a = Numo::DFloat.new(n, n).rand - 0.5
+    c = 0.5 * (a.transpose + a)
+    b = Numo::DFloat.eye(n)
+    v, _x, w, _info = Numo::TinyLinalg::Lapack.dsygv(c.dup, b.dup, itype: 1, jobz: 'V', uplo: 'U')
+    error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_ssygv
+    n = 5
+    a = Numo::SFloat.new(n, n).rand - 0.5
+    c = 0.5 * (a.transpose + a)
+    b = Numo::SFloat.eye(n)
+    v, _x, w, _info = Numo::TinyLinalg::Lapack.ssygv(c.dup, b.dup, itype: 1, jobz: 'V', uplo: 'U')
+    error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
+
+    assert(error < 1e-5)
+  end
+
+  def test_lapack_zhegv
+    n = 3
+    a = Numo::DFloat.new(n, n).rand - 0.5
+    a = 0.5 * (a.transpose + a)
+    b = Numo::DFloat.new(n, n).rand
+    b = 0.5 * (b.transpose + b)
+    b = (b.triu - b.tril)
+    b[b.diag_indices] = 0.0
+    c = a + (b * Complex::I)
+    d = Numo::DComplex.eye(n)
+    v, _x, w, _info = Numo::TinyLinalg::Lapack.zhegv(c.dup, d.dup, itype: 1, jobz: 'V', uplo: 'U')
+    error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_chegv
+    n = 3
+    a = Numo::SFloat.new(n, n).rand - 0.5
+    a = 0.5 * (a.transpose + a)
+    b = Numo::SFloat.new(n, n).rand
+    b = 0.5 * (b.transpose + b)
+    b = (b.triu - b.tril)
+    b[b.diag_indices] = 0.0
+    c = a + (b * Complex::I)
+    d = Numo::DComplex.eye(n)
+    v, _x, w, _info = Numo::TinyLinalg::Lapack.chegv(c.dup, d.dup, itype: 1, jobz: 'V', uplo: 'U')
+    error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
+
+    assert(error < 1e-5)
+  end
+
   def test_lapack_dsygvd
     n = 5
     a = Numo::DFloat.new(n, n).rand - 0.5
