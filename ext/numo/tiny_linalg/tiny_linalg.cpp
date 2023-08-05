@@ -11,12 +11,13 @@
 #include "lapack/gesvd.hpp"
 #include "lapack/getrf.hpp"
 #include "lapack/getri.hpp"
-#include "lapack/orgqr.hpp"
-#include "lapack/ungqr.hpp"
-#include "lapack/sygv.hpp"
-#include "lapack/sygvd.hpp"
 #include "lapack/hegv.hpp"
 #include "lapack/hegvd.hpp"
+#include "lapack/orgqr.hpp"
+#include "lapack/sygv.hpp"
+#include "lapack/sygvd.hpp"
+#include "lapack/sygvx.hpp"
+#include "lapack/ungqr.hpp"
 
 VALUE rb_mTinyLinalg;
 VALUE rb_mTinyLinalgBlas;
@@ -283,6 +284,8 @@ extern "C" void Init_tiny_linalg(void) {
   TinyLinalg::SyGvd<TinyLinalg::numo_cSFloatId, float, TinyLinalg::SSyGvd>::define_module_function(rb_mTinyLinalgLapack, "ssygvd");
   TinyLinalg::HeGvd<TinyLinalg::numo_cDComplexId, TinyLinalg::numo_cDFloatId, lapack_complex_double, double, TinyLinalg::ZHeGvd>::define_module_function(rb_mTinyLinalgLapack, "zhegvd");
   TinyLinalg::HeGvd<TinyLinalg::numo_cSComplexId, TinyLinalg::numo_cSFloatId, lapack_complex_float, float, TinyLinalg::CHeGvd>::define_module_function(rb_mTinyLinalgLapack, "chegvd");
+  TinyLinalg::SyGvx<TinyLinalg::numo_cDFloatId, double, TinyLinalg::DSyGvx>::define_module_function(rb_mTinyLinalgLapack, "dsygvx");
+  TinyLinalg::SyGvx<TinyLinalg::numo_cSFloatId, float, TinyLinalg::SSyGvx>::define_module_function(rb_mTinyLinalgLapack, "ssygvx");
 
   rb_define_alias(rb_singleton_class(rb_mTinyLinalgBlas), "znrm2", "dznrm2");
   rb_define_alias(rb_singleton_class(rb_mTinyLinalgBlas), "cnrm2", "scnrm2");
