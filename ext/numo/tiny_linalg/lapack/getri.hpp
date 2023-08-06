@@ -57,7 +57,7 @@ private:
     ID kw_table[1] = { rb_intern("order") };
     VALUE kw_values[1] = { Qundef };
     rb_get_kwargs(kw_args, kw_table, 0, 1, kw_values);
-    const int matrix_layout = kw_values[0] != Qundef ? get_matrix_layout(kw_values[0]) : LAPACK_ROW_MAJOR;
+    const int matrix_layout = kw_values[0] != Qundef ? Util().get_matrix_layout(kw_values[0]) : LAPACK_ROW_MAJOR;
 
     if (CLASS_OF(a_vnary) != nary_dtype) {
       a_vnary = rb_funcall(nary_dtype, rb_intern("cast"), 1, a_vnary);
@@ -101,26 +101,6 @@ private:
     RB_GC_GUARD(ipiv_vnary);
 
     return ret;
-  }
-
-  static int get_matrix_layout(VALUE val) {
-    const char* option_str = StringValueCStr(val);
-
-    if (std::strlen(option_str) > 0) {
-      switch (option_str[0]) {
-      case 'r':
-      case 'R':
-        break;
-      case 'c':
-      case 'C':
-        rb_warn("Numo::TinyLinalg::Lapack.getri does not support column major.");
-        break;
-      }
-    }
-
-    RB_GC_GUARD(val);
-
-    return LAPACK_ROW_MAJOR;
   }
 };
 

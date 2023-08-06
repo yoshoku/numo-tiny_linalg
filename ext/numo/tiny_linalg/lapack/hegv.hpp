@@ -63,10 +63,10 @@ private:
     ID kw_table[4] = { rb_intern("itype"), rb_intern("jobz"), rb_intern("uplo"), rb_intern("order") };
     VALUE kw_values[4] = { Qundef, Qundef, Qundef, Qundef };
     rb_get_kwargs(kw_args, kw_table, 0, 4, kw_values);
-    const lapack_int itype = kw_values[0] != Qundef ? get_itype(kw_values[0]) : 1;
-    const char jobz = kw_values[1] != Qundef ? get_jobz(kw_values[1]) : 'V';
-    const char uplo = kw_values[2] != Qundef ? get_uplo(kw_values[2]) : 'U';
-    const int matrix_layout = kw_values[3] != Qundef ? get_matrix_layout(kw_values[3]) : LAPACK_ROW_MAJOR;
+    const lapack_int itype = kw_values[0] != Qundef ? Util().get_itype(kw_values[0]) : 1;
+    const char jobz = kw_values[1] != Qundef ? Util().get_jobz(kw_values[1]) : 'V';
+    const char uplo = kw_values[2] != Qundef ? Util().get_uplo(kw_values[2]) : 'U';
+    const int matrix_layout = kw_values[3] != Qundef ? Util().get_matrix_layout(kw_values[3]) : LAPACK_ROW_MAJOR;
 
     if (CLASS_OF(a_vnary) != nary_dtype) {
       a_vnary = rb_funcall(nary_dtype, rb_intern("cast"), 1, a_vnary);
@@ -115,52 +115,6 @@ private:
     RB_GC_GUARD(b_vnary);
 
     return ret;
-  }
-
-  static lapack_int get_itype(VALUE val) {
-    const lapack_int itype = NUM2INT(val);
-
-    if (itype != 1 && itype != 2 && itype != 3) {
-      rb_raise(rb_eArgError, "itype must be 1, 2 or 3");
-    }
-
-    return itype;
-  }
-
-  static char get_jobz(VALUE val) {
-    const char jobz = NUM2CHR(val);
-
-    if (jobz != 'n' && jobz != 'N' && jobz != 'v' && jobz != 'V') {
-      rb_raise(rb_eArgError, "jobz must be 'N' or 'V'");
-    }
-
-    return jobz;
-  }
-
-  static char get_uplo(VALUE val) {
-    const char uplo = NUM2CHR(val);
-
-    if (uplo != 'u' && uplo != 'U' && uplo != 'l' && uplo != 'L') {
-      rb_raise(rb_eArgError, "uplo must be 'U' or 'L'");
-    }
-
-    return uplo;
-  }
-
-  static int get_matrix_layout(VALUE val) {
-    const char option = NUM2CHR(val);
-
-    switch (option) {
-    case 'r':
-    case 'R':
-      break;
-    case 'c':
-    case 'C':
-      rb_warn("Numo::TinyLinalg::Lapack.sygv does not support column major.");
-      break;
-    }
-
-    return LAPACK_ROW_MAJOR;
   }
 };
 

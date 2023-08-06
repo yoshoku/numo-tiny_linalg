@@ -69,15 +69,15 @@ private:
                        rb_intern("vl"), rb_intern("vu"), rb_intern("il"), rb_intern("iu"), rb_intern("order") };
     VALUE kw_values[9] = { Qundef, Qundef, Qundef, Qundef, Qundef, Qundef, Qundef, Qundef, Qundef };
     rb_get_kwargs(kw_args, kw_table, 0, 9, kw_values);
-    const lapack_int itype = kw_values[0] != Qundef ? get_itype(kw_values[0]) : 1;
-    const char jobz = kw_values[1] != Qundef ? get_jobz(kw_values[1]) : 'V';
-    const char range = kw_values[2] != Qundef ? get_range(kw_values[2]) : 'A';
-    const char uplo = kw_values[3] != Qundef ? get_uplo(kw_values[3]) : 'U';
+    const lapack_int itype = kw_values[0] != Qundef ? Util().get_itype(kw_values[0]) : 1;
+    const char jobz = kw_values[1] != Qundef ? Util().get_jobz(kw_values[1]) : 'V';
+    const char range = kw_values[2] != Qundef ? Util().get_range(kw_values[2]) : 'A';
+    const char uplo = kw_values[3] != Qundef ? Util().get_uplo(kw_values[3]) : 'U';
     const dtype vl = kw_values[4] != Qundef ? NUM2DBL(kw_values[4]) : 0.0;
     const dtype vu = kw_values[5] != Qundef ? NUM2DBL(kw_values[5]) : 0.0;
     const lapack_int il = kw_values[6] != Qundef ? NUM2INT(kw_values[6]) : 0;
     const lapack_int iu = kw_values[7] != Qundef ? NUM2INT(kw_values[7]) : 0;
-    const int matrix_layout = kw_values[8] != Qundef ? get_matrix_layout(kw_values[8]) : LAPACK_ROW_MAJOR;
+    const int matrix_layout = kw_values[8] != Qundef ? Util().get_matrix_layout(kw_values[8]) : LAPACK_ROW_MAJOR;
 
     if (CLASS_OF(a_vnary) != nary_dtype) {
       a_vnary = rb_funcall(nary_dtype, rb_intern("cast"), 1, a_vnary);
@@ -130,62 +130,6 @@ private:
     RB_GC_GUARD(b_vnary);
 
     return ret;
-  }
-
-  static lapack_int get_itype(VALUE val) {
-    const lapack_int itype = NUM2INT(val);
-
-    if (itype != 1 && itype != 2 && itype != 3) {
-      rb_raise(rb_eArgError, "itype must be 1, 2 or 3");
-    }
-
-    return itype;
-  }
-
-  static char get_jobz(VALUE val) {
-    const char jobz = NUM2CHR(val);
-
-    if (jobz != 'N' && jobz != 'V') {
-      rb_raise(rb_eArgError, "jobz must be 'N' or 'V'");
-    }
-
-    return jobz;
-  }
-
-  static char get_range(VALUE val) {
-    const char range = NUM2CHR(val);
-
-    if (range != 'A' && range != 'V' && range != 'I') {
-      rb_raise(rb_eArgError, "range must be 'A', 'V' or 'I'");
-    }
-
-    return range;
-  }
-
-  static char get_uplo(VALUE val) {
-    const char uplo = NUM2CHR(val);
-
-    if (uplo != 'U' && uplo != 'L') {
-      rb_raise(rb_eArgError, "uplo must be 'U' or 'L'");
-    }
-
-    return uplo;
-  }
-
-  static int get_matrix_layout(VALUE val) {
-    const char option = NUM2CHR(val);
-
-    switch (option) {
-    case 'r':
-    case 'R':
-      break;
-    case 'c':
-    case 'C':
-      rb_warn("Numo::TinyLinalg::Lapack.sygvx does not support column major.");
-      break;
-    }
-
-    return LAPACK_ROW_MAJOR;
   }
 };
 

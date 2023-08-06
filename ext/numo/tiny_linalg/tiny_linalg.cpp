@@ -1,10 +1,13 @@
 #include "tiny_linalg.hpp"
+
+#include "converter.hpp"
+#include "util.hpp"
+
 #include "blas/dot.hpp"
 #include "blas/dot_sub.hpp"
 #include "blas/gemm.hpp"
 #include "blas/gemv.hpp"
 #include "blas/nrm2.hpp"
-#include "converter.hpp"
 #include "lapack/geqrf.hpp"
 #include "lapack/gesdd.hpp"
 #include "lapack/gesv.hpp"

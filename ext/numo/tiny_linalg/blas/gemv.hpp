@@ -94,8 +94,8 @@ private:
 
     dtype alpha = kw_values[0] != Qundef ? Converter().to_dtype(kw_values[0]) : Converter().one();
     dtype beta = kw_values[1] != Qundef ? Converter().to_dtype(kw_values[1]) : Converter().zero();
-    enum CBLAS_ORDER order = kw_values[2] != Qundef ? get_cblas_order(kw_values[2]) : CblasRowMajor;
-    enum CBLAS_TRANSPOSE trans = kw_values[3] != Qundef ? get_cblas_trans(kw_values[3]) : CblasNoTrans;
+    enum CBLAS_ORDER order = kw_values[2] != Qundef ? Util().get_cblas_order(kw_values[2]) : CblasRowMajor;
+    enum CBLAS_TRANSPOSE trans = kw_values[3] != Qundef ? Util().get_cblas_trans(kw_values[3]) : CblasNoTrans;
 
     narray_t* a_nary = NULL;
     GetNArray(a, a_nary);
@@ -159,52 +159,6 @@ private:
     RB_GC_GUARD(y);
 
     return ret;
-  }
-
-  static enum CBLAS_TRANSPOSE get_cblas_trans(VALUE val) {
-    const char* option_str = StringValueCStr(val);
-    enum CBLAS_TRANSPOSE res = CblasNoTrans;
-
-    if (std::strlen(option_str) > 0) {
-      switch (option_str[0]) {
-      case 'n':
-      case 'N':
-        res = CblasNoTrans;
-        break;
-      case 't':
-      case 'T':
-        res = CblasTrans;
-        break;
-      case 'c':
-      case 'C':
-        res = CblasConjTrans;
-        break;
-      }
-    }
-
-    RB_GC_GUARD(val);
-
-    return res;
-  }
-
-  static enum CBLAS_ORDER get_cblas_order(VALUE val) {
-    const char* option_str = StringValueCStr(val);
-
-    if (std::strlen(option_str) > 0) {
-      switch (option_str[0]) {
-      case 'r':
-      case 'R':
-        break;
-      case 'c':
-      case 'C':
-        rb_warn("Numo::TinyLinalg::BLAS.gemm does not support column major.");
-        break;
-      }
-    }
-
-    RB_GC_GUARD(val);
-
-    return CblasRowMajor;
   }
 };
 
