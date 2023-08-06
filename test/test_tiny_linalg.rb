@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength, Style/Documentation
+class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
   def setup
     Numo::NArray.srand(Minitest.seed)
   end

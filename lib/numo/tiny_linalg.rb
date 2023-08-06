@@ -13,6 +13,32 @@ module Numo
     # Computes the eigenvalues and eigenvectors of a symmetric / Hermitian matrix
     # by solving an ordinary or generalized eigenvalue problem.
     #
+    # @example
+    #   require 'numo/tiny_linalg'
+    #
+    #   Numo::Linalg = Numo::TinyLinalg unless defined?(Numo::Linalg)
+    #
+    #   x = Numo::DFloat.new(5, 3).rand - 0.5
+    #   c = x.dot(x.transpose)
+    #   vals, vecs = Numo::Linalg.eigh(c, vals_range: [2, 4])
+    #
+    #   pp vals
+    #   # =>
+    #   # Numo::DFloat#shape=[3]
+    #   # [0.118795, 0.434252, 0.903245]
+    #
+    #   pp vecs
+    #   # =>
+    #   # Numo::DFloat#shape=[5,3]
+    #   # [[0.154178, 0.60661, -0.382961],
+    #   #  [-0.349761, -0.141726, -0.513178],
+    #   #  [0.739633, -0.468202, 0.105933],
+    #   #  [0.0519655, -0.471436, -0.701507],
+    #   #  [-0.551488, -0.412883, 0.294371]]
+    #
+    #   pp (x - vecs.dot(vals.diag).dot(vecs.transpose)).abs.max
+    #   # => 3.3306690738754696e-16
+    #
     # @param a [Numo::NArray] n-by-n symmetric / Hermitian matrix.
     # @param b [Numo::NArray] n-by-n symmetric / Hermitian matrix. If nil, identity matrix is assumed.
     # @param vals_only [Boolean] The flag indicating whether to return only eigenvalues.
@@ -56,6 +82,15 @@ module Numo
 
     # Computes the determinant of matrix.
     #
+    # @example
+    #   require 'numo/tiny_linalg'
+    #
+    #   Numo::Linalg = Numo::TinyLinalg unless defined?(Numo::Linalg)
+    #
+    #   a = Numo::DFloat[[0, 2, 3], [4, 5, 6], [7, 8, 9]]
+    #   pp (3.0 - Numo::Linalg.det(a)).abs
+    #   # => 1.3322676295501878e-15
+    #
     # @param a [Numo::NArray] n-by-n square matrix.
     # @return [Float/Complex] The determinant of `a`.
     def det(a)
@@ -81,6 +116,21 @@ module Numo
     end
 
     # Computes the inverse matrix of a square matrix.
+    #
+    # @example
+    #   require 'numo/tiny_linalg'
+    #
+    #   Numo::Linalg = Numo::TinyLinalg unless defined?(Numo::Linalg)
+    #
+    #   a = Numo::DFloat.new(5, 5).rand
+    #
+    #   inv_a = Numo::Linalg.inv(a)
+    #
+    #   pp (inv_a.dot(a) - Numo::DFloat.eye(5)).abs.max
+    #   # => 7.019165976816745e-16
+    #
+    #   pp inv_a.dot(a).sum
+    #   # => 5.0
     #
     # @param a [Numo::NArray] n-by-n square matrix.
     # @param driver [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
@@ -108,6 +158,21 @@ module Numo
 
     # Compute the (Moore-Penrose) pseudo-inverse of a matrix using singular value decomposition.
     #
+    # @example
+    #   require 'numo/tiny_linalg'
+    #
+    #   Numo::Linalg = Numo::TinyLinalg unless defined?(Numo::Linalg)
+    #
+    #   a = Numo::DFloat.new(5, 3).rand
+    #
+    #   inv_a = Numo::Linalg.pinv(a)
+    #
+    #   pp (inv_a.dot(a) - Numo::DFloat.eye(3)).abs.max
+    #   # => 1.1102230246251565e-15
+    #
+    #   pp inv_a.dot(a).sum
+    #   # => 3.0
+    #
     # @param a [Numo::NArray] The m-by-n matrix to be pseudo-inverted.
     # @param driver [String] LAPACK driver to be used ('svd' or 'sdd').
     # @param rcond [Float] The threshold value for small singular values of `a`, default value is `a.shape.max * EPS`.
@@ -122,6 +187,34 @@ module Numo
     end
 
     # Compute QR decomposition of a matrix.
+    #
+    # @example
+    #   require 'numo/tiny_linalg'
+    #
+    #   Numo::Linalg = Numo::TinyLinalg unless defined?(Numo::Linalg)
+    #
+    #   x = Numo::DFloat.new(5, 3).rand
+    #
+    #   q, r = Numo::Linalg.qr(x, mode: 'economic')
+    #
+    #   pp q
+    #   # =>
+    #   # Numo::DFloat#shape=[5,3]
+    #   # [[-0.0574417, 0.635216, 0.707116],
+    #   #  [-0.187002, -0.073192, 0.422088],
+    #   #  [-0.502239, 0.634088, -0.537489],
+    #   #  [-0.0473292, 0.134867, -0.0223491],
+    #   #  [-0.840979, -0.413385, 0.180096]]
+    #
+    #   pp r
+    #   # =>
+    #   # Numo::DFloat#shape=[3,3]
+    #   # [[-1.07508, -0.821334, -0.484586],
+    #   #  [0, 0.513035, 0.451868],
+    #   #  [0, 0, 0.678737]]
+    #
+    #   pp (q.dot(r) - x).abs.max
+    #   # => 3.885780586188048e-16
     #
     # @param a [Numo::NArray] The m-by-n matrix to be decomposed.
     # @param mode [String] The mode of decomposition.
@@ -166,6 +259,26 @@ module Numo
 
     # Solves linear equation `A * x = b` or `A * X = B` for `x` from square matrix `a`.
     #
+    # @example
+    #   require 'numo/tiny_linalg'
+    #
+    #   Numo::Linalg = Numo::TinyLinalg unless defined?(Numo::Linalg)
+    #
+    #   a = Numo::DFloat.new(3, 3).rand
+    #   b = Numo::DFloat.eye(3)
+    #
+    #   x = Numo::Linalg.solve(a, b)
+    #
+    #   pp x
+    #   # =>
+    #   # Numo::DFloat#shape=[3,3]
+    #   # [[-2.12332, 4.74868, 0.326773],
+    #   #  [1.38043, -3.79074, 1.25355],
+    #   #  [0.775187, 1.41032, -0.613774]]
+    #
+    #   pp (b - a.dot(x)).abs.max
+    #   # => 2.1081041547796492e-16
+    #
     # @param a [Numo::NArray] The n-by-n square matrix  (>= 2-dimensinal NArray).
     # @param b [Numo::NArray] The n right-hand side vector, or n-by-nrhs right-hand side matrix (>= 1-dimensinal NArray).
     # @param driver [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
@@ -185,6 +298,36 @@ module Numo
     end
 
     # Calculates the Singular Value Decomposition (SVD) of a matrix: `A = U * S * V^T`
+    #
+    # @example
+    #   require 'numo/tiny_linalg'
+    #
+    #   Numo::Linalg = Numo::TinyLinalg unless defined?(Numo::Linalg)
+    #
+    #   x = Numo::DFloat.new(5, 2).rand.dot(Numo::DFloat.new(2, 3).rand)
+    #   pp x
+    #   # =>
+    #   # Numo::DFloat#shape=[5,3]
+    #   # [[0.104945, 0.0284236, 0.117406],
+    #   #  [0.862634, 0.210945, 0.922135],
+    #   #  [0.324507, 0.0752655, 0.339158],
+    #   #  [0.67085, 0.102594, 0.600882],
+    #   #  [0.404631, 0.116868, 0.46644]]
+    #
+    #   s, u, vt = Numo::Linalg.svd(x, job: 'S')
+    #
+    #   z = u.dot(s.diag).dot(vt)
+    #   pp z
+    #   # =>
+    #   # Numo::DFloat#shape=[5,3]
+    #   # [[0.104945, 0.0284236, 0.117406],
+    #   #  [0.862634, 0.210945, 0.922135],
+    #   #  [0.324507, 0.0752655, 0.339158],
+    #   #  [0.67085, 0.102594, 0.600882],
+    #   #  [0.404631, 0.116868, 0.46644]]
+    #
+    #   pp (x - z).abs.max
+    #   # => 4.440892098500626e-16
     #
     # @param a [Numo::NArray] Matrix to be decomposed.
     # @param driver [String] LAPACK driver to be used ('svd' or 'sdd').

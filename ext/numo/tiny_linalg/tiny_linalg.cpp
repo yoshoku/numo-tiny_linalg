@@ -197,11 +197,13 @@ extern "C" void Init_tiny_linalg(void) {
   /**
    * Document-module: Numo::TinyLinalg::Blas
    * Numo::TinyLinalg::Blas is wrapper module of BLAS functions.
+   * @!visibility private
    */
   rb_mTinyLinalgBlas = rb_define_module_under(rb_mTinyLinalg, "Blas");
   /**
    * Document-module: Numo::TinyLinalg::Lapack
    * Numo::TinyLinalg::Lapack is wrapper module of LAPACK functions.
+   * @!visibility private
    */
   rb_mTinyLinalgLapack = rb_define_module_under(rb_mTinyLinalg, "Lapack");
 
