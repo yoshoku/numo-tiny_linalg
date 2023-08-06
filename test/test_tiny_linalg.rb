@@ -515,6 +515,54 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     # assert(mv < n)
   end
 
+  def test_eigh
+    m = 3
+    n = 5
+    x = Numo::DFloat.new(m, n).rand - 0.5
+    y = Numo::DFloat.new(m, n).rand - 0.5
+    a = x.transpose.dot(x)
+    b = y.transpose.dot(y) + (n * Numo::DFloat.eye(n))
+    v, w = Numo::TinyLinalg.eigh(a, b)
+    r = w.transpose.dot(a.dot(w))
+    r = r[r.diag_indices]
+    e = w.transpose.dot(b.dot(w))
+    e = e[e.diag_indices]
+
+    assert((v - r).abs.max < 1e-7)
+    assert((e - 1).abs.max < 1e-7)
+
+    v, w = Numo::TinyLinalg.eigh(a, b, vals_range: [n - m, n - 1])
+    r = w.transpose.dot(a.dot(w))
+    r = r[r.diag_indices]
+    e = w.transpose.dot(b.dot(w))
+    e = e[e.diag_indices]
+
+    assert((v - r).abs.max < 1e-7)
+    assert((e - 1).abs.max < 1e-7)
+
+    x = Numo::DComplex.new(m, n).rand - 0.5
+    y = Numo::DComplex.new(m, n).rand - 0.5
+    a = x.transpose.conjugate.dot(x)
+    b = y.transpose.conjugate.dot(y) + (n * Numo::DComplex.eye(n))
+    v, w = Numo::TinyLinalg.eigh(a, b, turbo: true)
+    r = w.transpose.conjugate.dot(a.dot(w))
+    r = r[r.diag_indices]
+    e = w.transpose.conjugate.dot(b.dot(w))
+    e = e[e.diag_indices]
+
+    assert((v - r).abs.max < 1e-7)
+    assert((e - 1).abs.max < 1e-7)
+
+    v, w = Numo::TinyLinalg.eigh(a, b, vals_range: [n - m, n - 1])
+    r = w.transpose.conjugate.dot(a.dot(w))
+    r = r[r.diag_indices]
+    e = w.transpose.conjugate.dot(b.dot(w))
+    e = e[e.diag_indices]
+
+    assert((v - r).abs.max < 1e-7)
+    assert((e - 1).abs.max < 1e-7)
+  end
+
   def test_det
     a = Numo::DFloat[[0, 2, 3], [4, 5, 6], [7, 8, 9]]
     error = (Numo::TinyLinalg.det(a) - 3).abs

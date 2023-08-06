@@ -10,6 +10,50 @@ module Numo
   module TinyLinalg # rubocop:disable Metrics/ModuleLength
     module_function
 
+    # Computes the eigenvalues and eigenvectors of a symmetric / Hermitian matrix
+    # by solving an ordinary or generalized eigenvalue problem.
+    #
+    # @param a [Numo::NArray] n-by-n symmetric / Hermitian matrix.
+    # @param b [Numo::NArray] n-by-n symmetric / Hermitian matrix. If nil, identity matrix is assumed.
+    # @param vals_only [Boolean] The flag indicating whether to return only eigenvalues.
+    # @param vals_range [Range/Array]
+    #   The range of indices of the eigenvalues (in ascending order) and corresponding eigenvectors to be returned.
+    #   If nil, all eigenvalues and eigenvectors are computed.
+    # @param uplo [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
+    # @param turbo [Bool] The flag indicating whether to use a divide and conquer algorithm. If vals_range is given, this flag is ignored.
+    # @return [Array<Numo::NArray, Numo::NArray>] The eigenvalues and eigenvectors.
+    def eigh(a, b = nil, vals_only: false, vals_range: nil, uplo: 'U', turbo: false) # rubocop:disable Metrics/AbcSize, Metrics/ParameterLists, Lint/UnusedMethodArgument
+      raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
+      raise ArgumentError, 'input array a must be square' if a.shape[0] != a.shape[1]
+
+      bchr = blas_char(a)
+      raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
+
+      unless b.nil?
+        raise ArgumentError, 'input array b must be 2-dimensional' if b.ndim != 2
+        raise ArgumentError, 'input array b must be square' if b.shape[0] != b.shape[1]
+        raise ArgumentError, "invalid array type: #{b.class}" if blas_char(b) == 'n'
+      end
+
+      jobz = vals_only ? 'N' : 'V'
+      b = a.class.eye(a.shape[0]) if b.nil?
+      sy_he_gv = %w[d s].include?(bchr) ? "#{bchr}sygv" : "#{bchr}hegv"
+
+      if vals_range.nil?
+        sy_he_gv << 'd' if turbo
+        vecs, _b, vals, _info = Numo::TinyLinalg::Lapack.send(sy_he_gv.to_sym, a.dup, b.dup, jobz: jobz)
+      else
+        sy_he_gv << 'x'
+        il = vals_range.first + 1
+        iu = vals_range.last + 1
+        _a, _b, _m, vals, vecs, _ifail, _info = Numo::TinyLinalg::Lapack.send(
+          sy_he_gv.to_sym, a.dup, b.dup, jobz: jobz, range: 'I', il: il, iu: iu
+        )
+      end
+      vecs = nil if vals_only
+      [vals, vecs]
+    end
+
     # Computes the determinant of matrix.
     #
     # @param a [Numo::NArray] n-by-n square matrix.
