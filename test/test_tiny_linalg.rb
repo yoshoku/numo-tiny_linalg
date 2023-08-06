@@ -54,7 +54,7 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert((v - r).abs.max < 1e-7)
     assert((e - 1).abs.max < 1e-7)
 
-    v, w = Numo::TinyLinalg.eigh(a, b, vals_range: [n - m, n - 1])
+    v, w = Numo::TinyLinalg.eigh(a, b, vals_range: (n - m)...n)
     r = w.transpose.dot(a.dot(w))
     r = r[r.diag_indices]
     e = w.transpose.dot(b.dot(w))

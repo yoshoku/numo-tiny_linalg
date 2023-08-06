@@ -70,8 +70,8 @@ module Numo
         vecs, _b, vals, _info = Numo::TinyLinalg::Lapack.send(sy_he_gv.to_sym, a.dup, b.dup, jobz: jobz)
       else
         sy_he_gv << 'x'
-        il = vals_range.first + 1
-        iu = vals_range.last + 1
+        il = vals_range.first(1)[0] + 1
+        iu = vals_range.last(1)[0] + 1
         _a, _b, _m, vals, vecs, _ifail, _info = Numo::TinyLinalg::Lapack.send(
           sy_he_gv.to_sym, a.dup, b.dup, jobz: jobz, range: 'I', il: il, iu: iu
         )
