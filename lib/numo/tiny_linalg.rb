@@ -39,15 +39,15 @@ module Numo
     #   pp (x - vecs.dot(vals.diag).dot(vecs.transpose)).abs.max
     #   # => 3.3306690738754696e-16
     #
-    # @param a [Numo::NArray] n-by-n symmetric / Hermitian matrix.
-    # @param b [Numo::NArray] n-by-n symmetric / Hermitian matrix. If nil, identity matrix is assumed.
+    # @param a [Numo::NArray] The n-by-n symmetric / Hermitian matrix.
+    # @param b [Numo::NArray] The n-by-n symmetric / Hermitian matrix. If nil, identity matrix is assumed.
     # @param vals_only [Boolean] The flag indicating whether to return only eigenvalues.
     # @param vals_range [Range/Array]
     #   The range of indices of the eigenvalues (in ascending order) and corresponding eigenvectors to be returned.
     #   If nil, all eigenvalues and eigenvectors are computed.
     # @param uplo [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
     # @param turbo [Bool] The flag indicating whether to use a divide and conquer algorithm. If vals_range is given, this flag is ignored.
-    # @return [Array<Numo::NArray, Numo::NArray>] The eigenvalues and eigenvectors.
+    # @return [Array<Numo::NArray>] The eigenvalues and eigenvectors.
     def eigh(a, b = nil, vals_only: false, vals_range: nil, uplo: 'U', turbo: false) # rubocop:disable Metrics/AbcSize, Metrics/ParameterLists, Lint/UnusedMethodArgument
       raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
       raise ArgumentError, 'input array a must be square' if a.shape[0] != a.shape[1]
@@ -91,7 +91,7 @@ module Numo
     #   pp (3.0 - Numo::Linalg.det(a)).abs
     #   # => 1.3322676295501878e-15
     #
-    # @param a [Numo::NArray] n-by-n square matrix.
+    # @param a [Numo::NArray] The n-by-n square matrix.
     # @return [Float/Complex] The determinant of `a`.
     def det(a)
       raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
@@ -132,7 +132,7 @@ module Numo
     #   pp inv_a.dot(a).sum
     #   # => 5.0
     #
-    # @param a [Numo::NArray] n-by-n square matrix.
+    # @param a [Numo::NArray] The n-by-n square matrix.
     # @param driver [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
     # @param uplo [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
     # @return [Numo::NArray] The inverse matrix of `a`.
@@ -156,7 +156,7 @@ module Numo
       end
     end
 
-    # Compute the (Moore-Penrose) pseudo-inverse of a matrix using singular value decomposition.
+    # Computes the (Moore-Penrose) pseudo-inverse of a matrix using singular value decomposition.
     #
     # @example
     #   require 'numo/tiny_linalg'
@@ -174,7 +174,7 @@ module Numo
     #   # => 3.0
     #
     # @param a [Numo::NArray] The m-by-n matrix to be pseudo-inverted.
-    # @param driver [String] LAPACK driver to be used ('svd' or 'sdd').
+    # @param driver [String] The LAPACK driver to be used ('svd' or 'sdd').
     # @param rcond [Float] The threshold value for small singular values of `a`, default value is `a.shape.max * EPS`.
     # @return [Numo::NArray] The pseudo-inverse of `a`.
     def pinv(a, driver: 'svd', rcond: nil)
@@ -186,7 +186,7 @@ module Numo
       u.dot(vh[0...rank, true]).conj.transpose
     end
 
-    # Compute QR decomposition of a matrix.
+    # Computes the QR decomposition of a matrix.
     #
     # @example
     #   require 'numo/tiny_linalg'
@@ -222,9 +222,8 @@ module Numo
     #   - "r"        -- returns only R,
     #   - "economic" -- returns both Q [m, n] and R [n, n],
     #   - "raw"      -- returns QR and TAU (LAPACK geqrf results).
-    # @return [Numo::NArray] if mode='r'
-    # @return [Array<Numo::NArray,Numo::NArray>] if mode='reduce' or mode='economic'
-    # @return [Array<Numo::NArray,Numo::NArray>] if mode='raw' (LAPACK geqrf result)
+    # @return [Numo::NArray] if mode='r'.
+    # @return [Array<Numo::NArray>] if mode='reduce' or 'economic' or 'raw'.
     def qr(a, mode: 'reduce')
       raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
       raise ArgumentError, "invalid mode: #{mode}" unless %w[reduce r economic raw].include?(mode)
@@ -295,7 +294,7 @@ module Numo
       Numo::TinyLinalg::Lapack.send(gesv, a.dup, b.dup)[1]
     end
 
-    # Calculates the Singular Value Decomposition (SVD) of a matrix: `A = U * S * V^T`
+    # Computes the Singular Value Decomposition (SVD) of a matrix: `A = U * S * V^T`
     #
     # @example
     #   require 'numo/tiny_linalg'
@@ -328,9 +327,9 @@ module Numo
     #   # => 4.440892098500626e-16
     #
     # @param a [Numo::NArray] Matrix to be decomposed.
-    # @param driver [String] LAPACK driver to be used ('svd' or 'sdd').
-    # @param job [String] Job option ('A', 'S', or 'N').
-    # @return [Array<Numo::NArray>] Singular values and singular vectors ([s, u, vt]).
+    # @param driver [String] The LAPACK driver to be used ('svd' or 'sdd').
+    # @param job [String] The job option ('A', 'S', or 'N').
+    # @return [Array<Numo::NArray>] The singular values and singular vectors ([s, u, vt]).
     def svd(a, driver: 'svd', job: 'A')
       raise ArgumentError, "invalid job: #{job}" unless /^[ASN]/i.match?(job.to_s)
 
