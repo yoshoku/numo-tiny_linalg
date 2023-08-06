@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [[0.0.3](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.0.3...v0.0.4)] - 2023-08-06
+- Add dsygv, ssygv, zhegv, and chegv module functions to TinyLinalg::Lapack.
+- Add dsygvd, ssygvd, zhegvd, and chegvd module functions to TinyLinalg::Lapack.
+- Add dsygvx, ssygvx, zhegvx, and chegvx module functions to TinyLinalg::Lapack.
+- Add eigh module function to TinyLinalg.
+
 ## [[0.0.3](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.0.2...v0.0.3)] - 2023-08-02
 - Add dgeqrf, sgeqrf, zgeqrf, and cgeqrf module functions to TinyLinalg::Lapack.
 - Add dorgqr, sorgqr, zungqr, and cungqr module functions to TinyLinalg::Lapack.
