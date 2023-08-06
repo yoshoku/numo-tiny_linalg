@@ -1,6 +1,6 @@
 namespace TinyLinalg {
 
-struct DGESV {
+struct DGeSv {
   lapack_int call(int matrix_layout, lapack_int n, lapack_int nrhs,
                   double* a, lapack_int lda, lapack_int* ipiv,
                   double* b, lapack_int ldb) {
@@ -8,7 +8,7 @@ struct DGESV {
   }
 };
 
-struct SGESV {
+struct SGeSv {
   lapack_int call(int matrix_layout, lapack_int n, lapack_int nrhs,
                   float* a, lapack_int lda, lapack_int* ipiv,
                   float* b, lapack_int ldb) {
@@ -16,7 +16,7 @@ struct SGESV {
   }
 };
 
-struct ZGESV {
+struct ZGeSv {
   lapack_int call(int matrix_layout, lapack_int n, lapack_int nrhs,
                   lapack_complex_double* a, lapack_int lda, lapack_int* ipiv,
                   lapack_complex_double* b, lapack_int ldb) {
@@ -24,7 +24,7 @@ struct ZGESV {
   }
 };
 
-struct CGESV {
+struct CGeSv {
   lapack_int call(int matrix_layout, lapack_int n, lapack_int nrhs,
                   lapack_complex_float* a, lapack_int lda, lapack_int* ipiv,
                   lapack_complex_float* b, lapack_int ldb) {
@@ -32,8 +32,8 @@ struct CGESV {
   }
 };
 
-template <int nary_dtype_id, typename DType, typename FncType>
-class GESV {
+template <int nary_dtype_id, typename dtype, class LapackFn>
+class GeSv {
 public:
   static void define_module_function(VALUE mLapack, const char* fnc_name) {
     rb_define_module_function(mLapack, fnc_name, RUBY_METHOD_FUNC(tiny_linalg_gesv), -1);
@@ -45,8 +45,8 @@ private:
   };
 
   static void iter_gesv(na_loop_t* const lp) {
-    DType* a = (DType*)NDL_PTR(lp, 0);
-    DType* b = (DType*)NDL_PTR(lp, 1);
+    dtype* a = (dtype*)NDL_PTR(lp, 0);
+    dtype* b = (dtype*)NDL_PTR(lp, 1);
     int* ipiv = (int*)NDL_PTR(lp, 2);
     int* info = (int*)NDL_PTR(lp, 3);
     gesv_opt* opt = (gesv_opt*)(lp->opt_ptr);
@@ -54,7 +54,7 @@ private:
     const lapack_int nhrs = lp->args[1].ndim == 1 ? 1 : NDL_SHAPE(lp, 1)[1];
     const lapack_int lda = n;
     const lapack_int ldb = nhrs;
-    const lapack_int i = FncType().call(opt->matrix_layout, n, nhrs, a, lda, ipiv, b, ldb);
+    const lapack_int i = LapackFn().call(opt->matrix_layout, n, nhrs, a, lda, ipiv, b, ldb);
     *info = static_cast<int>(i);
   }
 

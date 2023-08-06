@@ -1,35 +1,35 @@
 namespace TinyLinalg {
 
-struct DGETRF {
+struct DGeTrf {
   lapack_int call(int matrix_layout, lapack_int m, lapack_int n,
                   double* a, lapack_int lda, lapack_int* ipiv) {
     return LAPACKE_dgetrf(matrix_layout, m, n, a, lda, ipiv);
   }
 };
 
-struct SGETRF {
+struct SGeTrf {
   lapack_int call(int matrix_layout, lapack_int m, lapack_int n,
                   float* a, lapack_int lda, lapack_int* ipiv) {
     return LAPACKE_sgetrf(matrix_layout, m, n, a, lda, ipiv);
   }
 };
 
-struct ZGETRF {
+struct ZGeTrf {
   lapack_int call(int matrix_layout, lapack_int m, lapack_int n,
                   lapack_complex_double* a, lapack_int lda, lapack_int* ipiv) {
     return LAPACKE_zgetrf(matrix_layout, m, n, a, lda, ipiv);
   }
 };
 
-struct CGETRF {
+struct CGeTrf {
   lapack_int call(int matrix_layout, lapack_int m, lapack_int n,
                   lapack_complex_float* a, lapack_int lda, lapack_int* ipiv) {
     return LAPACKE_cgetrf(matrix_layout, m, n, a, lda, ipiv);
   }
 };
 
-template <int nary_dtype_id, typename DType, typename FncType>
-class GETRF {
+template <int nary_dtype_id, typename dtype, class LapackFn>
+class GeTrf {
 public:
   static void define_module_function(VALUE mLapack, const char* fnc_name) {
     rb_define_module_function(mLapack, fnc_name, RUBY_METHOD_FUNC(tiny_linalg_getrf), -1);
@@ -41,14 +41,14 @@ private:
   };
 
   static void iter_getrf(na_loop_t* const lp) {
-    DType* a = (DType*)NDL_PTR(lp, 0);
+    dtype* a = (dtype*)NDL_PTR(lp, 0);
     int* ipiv = (int*)NDL_PTR(lp, 1);
     int* info = (int*)NDL_PTR(lp, 2);
     getrf_opt* opt = (getrf_opt*)(lp->opt_ptr);
     const lapack_int m = NDL_SHAPE(lp, 0)[0];
     const lapack_int n = NDL_SHAPE(lp, 0)[1];
     const lapack_int lda = n;
-    const lapack_int i = FncType().call(opt->matrix_layout, m, n, a, lda, ipiv);
+    const lapack_int i = LapackFn().call(opt->matrix_layout, m, n, a, lda, ipiv);
     *info = static_cast<int>(i);
   }
 

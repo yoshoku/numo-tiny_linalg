@@ -18,7 +18,7 @@ struct CHeGvx {
   }
 };
 
-template <int nary_dtype_id, int nary_rtype_id, typename DType, typename RType, typename FncType>
+template <int nary_dtype_id, int nary_rtype_id, typename dtype, typename rtype, class LapackFn>
 class HeGvx {
 public:
   static void define_module_function(VALUE mLapack, const char* fnc_name) {
@@ -32,18 +32,18 @@ private:
     char jobz;
     char range;
     char uplo;
-    RType vl;
-    RType vu;
+    rtype vl;
+    rtype vu;
     lapack_int il;
     lapack_int iu;
   };
 
   static void iter_hegvx(na_loop_t* const lp) {
-    DType* a = (DType*)NDL_PTR(lp, 0);
-    DType* b = (DType*)NDL_PTR(lp, 1);
+    dtype* a = (dtype*)NDL_PTR(lp, 0);
+    dtype* b = (dtype*)NDL_PTR(lp, 1);
     int* m = (int*)NDL_PTR(lp, 2);
-    RType* w = (RType*)NDL_PTR(lp, 3);
-    DType* z = (DType*)NDL_PTR(lp, 4);
+    rtype* w = (rtype*)NDL_PTR(lp, 3);
+    dtype* z = (dtype*)NDL_PTR(lp, 4);
     int* ifail = (int*)NDL_PTR(lp, 5);
     int* info = (int*)NDL_PTR(lp, 6);
     hegvx_opt* opt = (hegvx_opt*)(lp->opt_ptr);
@@ -51,8 +51,8 @@ private:
     const lapack_int lda = NDL_SHAPE(lp, 0)[0];
     const lapack_int ldb = NDL_SHAPE(lp, 1)[0];
     const lapack_int ldz = opt->range != 'I' ? n : opt->iu - opt->il + 1;
-    const RType abstol = 0.0;
-    const lapack_int i = FncType().call(
+    const rtype abstol = 0.0;
+    const lapack_int i = LapackFn().call(
       opt->matrix_layout, opt->itype, opt->jobz, opt->range, opt->uplo, n, a, lda, b, ldb,
       opt->vl, opt->vu, opt->il, opt->iu, abstol, m, w, z, ldz, ifail);
     *info = static_cast<int>(i);
@@ -74,8 +74,8 @@ private:
     const char jobz = kw_values[1] != Qundef ? get_jobz(kw_values[1]) : 'V';
     const char range = kw_values[2] != Qundef ? get_range(kw_values[2]) : 'A';
     const char uplo = kw_values[3] != Qundef ? get_uplo(kw_values[3]) : 'U';
-    const RType vl = kw_values[4] != Qundef ? NUM2DBL(kw_values[4]) : 0.0;
-    const RType vu = kw_values[5] != Qundef ? NUM2DBL(kw_values[5]) : 0.0;
+    const rtype vl = kw_values[4] != Qundef ? NUM2DBL(kw_values[4]) : 0.0;
+    const rtype vu = kw_values[5] != Qundef ? NUM2DBL(kw_values[5]) : 0.0;
     const lapack_int il = kw_values[6] != Qundef ? NUM2INT(kw_values[6]) : 0;
     const lapack_int iu = kw_values[7] != Qundef ? NUM2INT(kw_values[7]) : 0;
     const int matrix_layout = kw_values[8] != Qundef ? get_matrix_layout(kw_values[8]) : LAPACK_ROW_MAJOR;

@@ -24,7 +24,7 @@ struct CHeGvd {
   }
 };
 
-template <int nary_dtype_id, int nary_rtype_id, typename DType, typename RType, typename FncType>
+template <int nary_dtype_id, int nary_rtype_id, typename dtype, typename rtype, class LapackFn>
 class HeGvd {
 public:
   static void define_module_function(VALUE mLapack, const char* fnc_name) {
@@ -40,15 +40,15 @@ private:
   };
 
   static void iter_hegvd(na_loop_t* const lp) {
-    DType* a = (DType*)NDL_PTR(lp, 0);
-    DType* b = (DType*)NDL_PTR(lp, 1);
-    RType* w = (RType*)NDL_PTR(lp, 2);
+    dtype* a = (dtype*)NDL_PTR(lp, 0);
+    dtype* b = (dtype*)NDL_PTR(lp, 1);
+    rtype* w = (rtype*)NDL_PTR(lp, 2);
     int* info = (int*)NDL_PTR(lp, 3);
     hegvd_opt* opt = (hegvd_opt*)(lp->opt_ptr);
     const lapack_int n = NDL_SHAPE(lp, 0)[1];
     const lapack_int lda = NDL_SHAPE(lp, 0)[0];
     const lapack_int ldb = NDL_SHAPE(lp, 1)[0];
-    const lapack_int i = FncType().call(opt->matrix_layout, opt->itype, opt->jobz, opt->uplo, n, a, lda, b, ldb, w);
+    const lapack_int i = LapackFn().call(opt->matrix_layout, opt->itype, opt->jobz, opt->uplo, n, a, lda, b, ldb, w);
     *info = static_cast<int>(i);
   }
 

@@ -1,31 +1,31 @@
 namespace TinyLinalg {
 
-struct DGETRI {
+struct DGeTri {
   lapack_int call(int matrix_layout, lapack_int n, double* a, lapack_int lda, const lapack_int* ipiv) {
     return LAPACKE_dgetri(matrix_layout, n, a, lda, ipiv);
   }
 };
 
-struct SGETRI {
+struct SGeTri {
   lapack_int call(int matrix_layout, lapack_int n, float* a, lapack_int lda, const lapack_int* ipiv) {
     return LAPACKE_sgetri(matrix_layout, n, a, lda, ipiv);
   }
 };
 
-struct ZGETRI {
+struct ZGeTri {
   lapack_int call(int matrix_layout, lapack_int n, lapack_complex_double* a, lapack_int lda, const lapack_int* ipiv) {
     return LAPACKE_zgetri(matrix_layout, n, a, lda, ipiv);
   }
 };
 
-struct CGETRI {
+struct CGeTri {
   lapack_int call(int matrix_layout, lapack_int n, lapack_complex_float* a, lapack_int lda, const lapack_int* ipiv) {
     return LAPACKE_cgetri(matrix_layout, n, a, lda, ipiv);
   }
 };
 
-template <int nary_dtype_id, typename DType, typename FncType>
-class GETRI {
+template <int nary_dtype_id, typename dtype, class LapackFn>
+class GeTri {
 public:
   static void define_module_function(VALUE mLapack, const char* fnc_name) {
     rb_define_module_function(mLapack, fnc_name, RUBY_METHOD_FUNC(tiny_linalg_getri), -1);
@@ -37,13 +37,13 @@ private:
   };
 
   static void iter_getri(na_loop_t* const lp) {
-    DType* a = (DType*)NDL_PTR(lp, 0);
+    dtype* a = (dtype*)NDL_PTR(lp, 0);
     lapack_int* ipiv = (lapack_int*)NDL_PTR(lp, 1);
     int* info = (int*)NDL_PTR(lp, 2);
     getri_opt* opt = (getri_opt*)(lp->opt_ptr);
     const lapack_int n = NDL_SHAPE(lp, 0)[0];
     const lapack_int lda = n;
-    const lapack_int i = FncType().call(opt->matrix_layout, n, a, lda, ipiv);
+    const lapack_int i = LapackFn().call(opt->matrix_layout, n, a, lda, ipiv);
     *info = static_cast<int>(i);
   }
 

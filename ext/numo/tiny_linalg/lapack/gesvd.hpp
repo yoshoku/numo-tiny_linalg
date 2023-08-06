@@ -1,6 +1,6 @@
 namespace TinyLinalg {
 
-struct DGESVD {
+struct DGeSvd {
   lapack_int call(int matrix_order, char jobu, char jobvt, lapack_int m, lapack_int n,
                   double* a, lapack_int lda, double* s, double* u, lapack_int ldu, double* vt, lapack_int ldvt,
                   double* superb) {
@@ -8,7 +8,7 @@ struct DGESVD {
   };
 };
 
-struct SGESVD {
+struct SGeSvd {
   lapack_int call(int matrix_order, char jobu, char jobvt, lapack_int m, lapack_int n,
                   float* a, lapack_int lda, float* s, float* u, lapack_int ldu, float* vt, lapack_int ldvt,
                   float* superb) {
@@ -16,7 +16,7 @@ struct SGESVD {
   };
 };
 
-struct ZGESVD {
+struct ZGeSvd {
   lapack_int call(int matrix_order, char jobu, char jobvt, lapack_int m, lapack_int n,
                   lapack_complex_double* a, lapack_int lda, double* s, lapack_complex_double* u, lapack_int ldu, lapack_complex_double* vt, lapack_int ldvt,
                   double* superb) {
@@ -24,7 +24,7 @@ struct ZGESVD {
   };
 };
 
-struct CGESVD {
+struct CGeSvd {
   lapack_int call(int matrix_order, char jobu, char jobvt, lapack_int m, lapack_int n,
                   lapack_complex_float* a, lapack_int lda, float* s, lapack_complex_float* u, lapack_int ldu, lapack_complex_float* vt, lapack_int ldvt,
                   float* superb) {
@@ -32,8 +32,8 @@ struct CGESVD {
   };
 };
 
-template <int nary_dtype_id, int nary_rtype_id, typename DType, typename RType, typename FncType>
-class GESVD {
+template <int nary_dtype_id, int nary_rtype_id, typename dtype, typename rtype, class LapackFn>
+class GeSvd {
 public:
   static void define_module_function(VALUE mLapack, const char* mf_name) {
     rb_define_module_function(mLapack, mf_name, RUBY_METHOD_FUNC(tiny_linalg_gesvd), -1);
@@ -47,10 +47,10 @@ private:
   };
 
   static void iter_gesvd(na_loop_t* const lp) {
-    DType* a = (DType*)NDL_PTR(lp, 0);
-    RType* s = (RType*)NDL_PTR(lp, 1);
-    DType* u = (DType*)NDL_PTR(lp, 2);
-    DType* vt = (DType*)NDL_PTR(lp, 3);
+    dtype* a = (dtype*)NDL_PTR(lp, 0);
+    rtype* s = (rtype*)NDL_PTR(lp, 1);
+    dtype* u = (dtype*)NDL_PTR(lp, 2);
+    dtype* vt = (dtype*)NDL_PTR(lp, 3);
     int* info = (int*)NDL_PTR(lp, 4);
     gesvd_opt* opt = (gesvd_opt*)(lp->opt_ptr);
 
@@ -61,9 +61,9 @@ private:
     const lapack_int ldu = opt->jobu == 'A' ? m : min_mn;
     const lapack_int ldvt = n;
 
-    RType* superb = (RType*)ruby_xmalloc(min_mn * sizeof(RType));
+    rtype* superb = (rtype*)ruby_xmalloc(min_mn * sizeof(rtype));
 
-    lapack_int i = FncType().call(opt->matrix_order, opt->jobu, opt->jobvt, m, n, a, lda, s, u, ldu, vt, ldvt, superb);
+    lapack_int i = LapackFn().call(opt->matrix_order, opt->jobu, opt->jobvt, m, n, a, lda, s, u, ldu, vt, ldvt, superb);
     *info = static_cast<int>(i);
 
     ruby_xfree(superb);

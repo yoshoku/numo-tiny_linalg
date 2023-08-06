@@ -28,7 +28,7 @@ struct CGeQrf {
   }
 };
 
-template <int nary_dtype_id, typename DType, typename FncType>
+template <int nary_dtype_id, typename dtype, class LapackFn>
 class GeQrf {
 public:
   static void define_module_function(VALUE mLapack, const char* fnc_name) {
@@ -41,14 +41,14 @@ private:
   };
 
   static void iter_geqrf(na_loop_t* const lp) {
-    DType* a = (DType*)NDL_PTR(lp, 0);
-    DType* tau = (DType*)NDL_PTR(lp, 1);
+    dtype* a = (dtype*)NDL_PTR(lp, 0);
+    dtype* tau = (dtype*)NDL_PTR(lp, 1);
     int* info = (int*)NDL_PTR(lp, 2);
     geqrf_opt* opt = (geqrf_opt*)(lp->opt_ptr);
     const lapack_int m = NDL_SHAPE(lp, 0)[0];
     const lapack_int n = NDL_SHAPE(lp, 0)[1];
     const lapack_int lda = n;
-    const lapack_int i = FncType().call(opt->matrix_layout, m, n, a, lda, tau);
+    const lapack_int i = LapackFn().call(opt->matrix_layout, m, n, a, lda, tau);
     *info = static_cast<int>(i);
   }
 

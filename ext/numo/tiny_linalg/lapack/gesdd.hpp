@@ -1,35 +1,35 @@
 namespace TinyLinalg {
 
-struct DGESDD {
+struct DGeSdd {
   lapack_int call(int matrix_order, char jobz, lapack_int m, lapack_int n,
                   double* a, lapack_int lda, double* s, double* u, lapack_int ldu, double* vt, lapack_int ldvt) {
     return LAPACKE_dgesdd(matrix_order, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
   };
 };
 
-struct SGESDD {
+struct SGeSdd {
   lapack_int call(int matrix_order, char jobz, lapack_int m, lapack_int n,
                   float* a, lapack_int lda, float* s, float* u, lapack_int ldu, float* vt, lapack_int ldvt) {
     return LAPACKE_sgesdd(matrix_order, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
   };
 };
 
-struct ZGESDD {
+struct ZGeSdd {
   lapack_int call(int matrix_order, char jobz, lapack_int m, lapack_int n,
                   lapack_complex_double* a, lapack_int lda, double* s, lapack_complex_double* u, lapack_int ldu, lapack_complex_double* vt, lapack_int ldvt) {
     return LAPACKE_zgesdd(matrix_order, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
   };
 };
 
-struct CGESDD {
+struct CGeSdd {
   lapack_int call(int matrix_order, char jobz, lapack_int m, lapack_int n,
                   lapack_complex_float* a, lapack_int lda, float* s, lapack_complex_float* u, lapack_int ldu, lapack_complex_float* vt, lapack_int ldvt) {
     return LAPACKE_cgesdd(matrix_order, jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
   };
 };
 
-template <int nary_dtype_id, int nary_rtype_id, typename DType, typename RType, typename FncType>
-class GESDD {
+template <int nary_dtype_id, int nary_rtype_id, typename dtype, typename rtype, class LapackFn>
+class GeSdd {
 public:
   static void define_module_function(VALUE mLapack, const char* mf_name) {
     rb_define_module_function(mLapack, mf_name, RUBY_METHOD_FUNC(tiny_linalg_gesdd), -1);
@@ -42,10 +42,10 @@ private:
   };
 
   static void iter_gesdd(na_loop_t* const lp) {
-    DType* a = (DType*)NDL_PTR(lp, 0);
-    RType* s = (RType*)NDL_PTR(lp, 1);
-    DType* u = (DType*)NDL_PTR(lp, 2);
-    DType* vt = (DType*)NDL_PTR(lp, 3);
+    dtype* a = (dtype*)NDL_PTR(lp, 0);
+    rtype* s = (rtype*)NDL_PTR(lp, 1);
+    dtype* u = (dtype*)NDL_PTR(lp, 2);
+    dtype* vt = (dtype*)NDL_PTR(lp, 3);
     int* info = (int*)NDL_PTR(lp, 4);
     gesdd_opt* opt = (gesdd_opt*)(lp->opt_ptr);
 
@@ -56,7 +56,7 @@ private:
     const lapack_int ldu = opt->jobz == 'S' ? min_mn : m;
     const lapack_int ldvt = opt->jobz == 'S' ? min_mn : n;
 
-    lapack_int i = FncType().call(opt->matrix_order, opt->jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
+    lapack_int i = LapackFn().call(opt->matrix_order, opt->jobz, m, n, a, lda, s, u, ldu, vt, ldvt);
     *info = static_cast<int>(i);
   };
 
