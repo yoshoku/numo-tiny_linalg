@@ -296,6 +296,46 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     assert(error < 1e-5)
   end
 
+  def test_lapack_dsyev
+    n = 5
+    a = Numo::DFloat.new(n, n).rand - 0.5
+    c = 0.5 * (a.transpose + a)
+    v, w, _info = Numo::TinyLinalg::Lapack.dsyev(c.dup, jobz: 'V', uplo: 'U')
+    error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_ssyev
+    n = 5
+    a = Numo::SFloat.new(n, n).rand - 0.5
+    c = 0.5 * (a.transpose + a)
+    v, w, _info = Numo::TinyLinalg::Lapack.ssyev(c.dup, jobz: 'V', uplo: 'U')
+    error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
+
+    assert(error < 1e-5)
+  end
+
+  def test_lapack_zheev
+    n = 5
+    a = Numo::DComplex.new(n, n).rand - 0.5
+    c = a.transpose.conjugate.dot(a)
+    v, w, _info = Numo::TinyLinalg::Lapack.zheev(c.dup, jobz: 'V', uplo: 'U')
+    error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_cheev
+    n = 5
+    a = Numo::SComplex.new(n, n).rand - 0.5
+    c = a.transpose.conjugate.dot(a)
+    v, w, _info = Numo::TinyLinalg::Lapack.cheev(c.dup, jobz: 'V', uplo: 'U')
+    error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
+
+    assert(error < 1e-5)
+  end
+
   def test_lapack_dsygv
     n = 5
     a = Numo::DFloat.new(n, n).rand - 0.5
