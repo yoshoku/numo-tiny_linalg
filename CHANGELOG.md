@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [[0.1.1](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.1.0...v0.1.1)] - 2023-08-07
+- Fix method of getting start and end of eigenvalue range from vals_range arguement of TinyLinalg.eigh.
+
 ## [[0.1.0](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.0.4...v0.1.0)] - 2023-08-06
 - Refactor codes and update documentations.
 
