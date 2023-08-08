@@ -83,7 +83,7 @@ private:
       return Qnil;
     }
     narray_t* b_nary = nullptr;
-    GetNArray(a_vnary, b_nary);
+    GetNArray(b_vnary, b_nary);
     if (NA_NDIM(b_nary) != 2) {
       rb_raise(rb_eArgError, "input array b must be 2-dimensional");
       return Qnil;
