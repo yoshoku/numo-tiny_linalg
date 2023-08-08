@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [[0.1.2](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.1.1...v0.1.2)] - 2023-08-09
+- Add dsyev, ssyev, zheev, and cheev module functions to TinyLinalg::Lapack.
+- Add dsyevd, ssyevd, zheevd, and cheevd module functions to TinyLinalg::Lapack.
+- Add dsyevr, ssyevr, zheevr, and cheevr module functions to TinyLinalg::Lapack.
+- Fix the confirmation processs whether the array b is a square matrix or not on TinyLinalg.eigh.
+
 ## [[0.1.1](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.1.0...v0.1.1)] - 2023-08-07
 - Fix method of getting start and end of eigenvalue range from vals_range arguement of TinyLinalg.eigh.
 
@@ -28,5 +34,4 @@
 - Add inv module function to TinyLinalg.
 
 ## [0.0.1] - 2023-07-14
-
-- Initial release
+- Initial release.
