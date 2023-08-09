@@ -8,6 +8,8 @@
 Numo::TinyLinalg is a subset library from [Numo::Linalg](https://github.com/ruby-numo/numo-linalg) consisting only of methods used in Machine Learning algorithms.
 The functions Numo::TinyLinalg supports are dot, det, eigh, inv, pinv, qr, solve, and svd.
 
+Note that the version numbering rule of Numo::TinyLinalg is not compatible with that of Numo::Linalg.
+
 ## Installation
 Unlike Numo::Linalg, Numo::TinyLinalg only supports OpenBLAS as a backend library for BLAS and LAPACK.
 
