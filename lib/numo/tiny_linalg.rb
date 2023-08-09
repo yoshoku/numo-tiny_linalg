@@ -48,35 +48,50 @@ module Numo
     # @param uplo [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
     # @param turbo [Bool] The flag indicating whether to use a divide and conquer algorithm. If vals_range is given, this flag is ignored.
     # @return [Array<Numo::NArray>] The eigenvalues and eigenvectors.
-    def eigh(a, b = nil, vals_only: false, vals_range: nil, uplo: 'U', turbo: false) # rubocop:disable Metrics/AbcSize, Metrics/ParameterLists, Lint/UnusedMethodArgument
+    def eigh(a, b = nil, vals_only: false, vals_range: nil, uplo: 'U', turbo: false) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/ParameterLists, Metrics/PerceivedComplexity, Lint/UnusedMethodArgument
       raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
       raise ArgumentError, 'input array a must be square' if a.shape[0] != a.shape[1]
+
+      b_given = !b.nil?
+      raise ArgumentError, 'input array b must be 2-dimensional' if b_given && b.ndim != 2
+      raise ArgumentError, 'input array b must be square' if b_given && b.shape[0] != b.shape[1]
+      raise ArgumentError, "invalid array type: #{b.class}" if b_given && blas_char(b) == 'n'
 
       bchr = blas_char(a)
       raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
 
-      unless b.nil?
-        raise ArgumentError, 'input array b must be 2-dimensional' if b.ndim != 2
-        raise ArgumentError, 'input array b must be square' if b.shape[0] != b.shape[1]
-        raise ArgumentError, "invalid array type: #{b.class}" if blas_char(b) == 'n'
-      end
-
       jobz = vals_only ? 'N' : 'V'
-      b = a.class.eye(a.shape[0]) if b.nil?
-      sy_he_gv = %w[d s].include?(bchr) ? "#{bchr}sygv" : "#{bchr}hegv"
 
-      if vals_range.nil?
-        sy_he_gv << 'd' if turbo
-        vecs, _b, vals, _info = Numo::TinyLinalg::Lapack.send(sy_he_gv.to_sym, a.dup, b.dup, jobz: jobz)
+      if b_given
+        fnc = %w[d s].include?(bchr) ? "#{bchr}sygv" : "#{bchr}hegv"
+        if vals_range.nil?
+          fnc << 'd' if turbo
+          vecs, _b, vals, _info = Numo::TinyLinalg::Lapack.send(fnc.to_sym, a.dup, b.dup, jobz: jobz)
+        else
+          fnc << 'x'
+          il = vals_range.first(1)[0] + 1
+          iu = vals_range.last(1)[0] + 1
+          _a, _b, _m, vals, vecs, _ifail, _info = Numo::TinyLinalg::Lapack.send(
+            fnc.to_sym, a.dup, b.dup, jobz: jobz, range: 'I', il: il, iu: iu
+          )
+        end
       else
-        sy_he_gv << 'x'
-        il = vals_range.first(1)[0] + 1
-        iu = vals_range.last(1)[0] + 1
-        _a, _b, _m, vals, vecs, _ifail, _info = Numo::TinyLinalg::Lapack.send(
-          sy_he_gv.to_sym, a.dup, b.dup, jobz: jobz, range: 'I', il: il, iu: iu
-        )
+        fnc = %w[d s].include?(bchr) ? "#{bchr}syev" : "#{bchr}heev"
+        if vals_range.nil?
+          fnc << 'd' if turbo
+          vecs, vals, _info = Numo::TinyLinalg::Lapack.send(fnc.to_sym, a.dup, jobz: jobz)
+        else
+          fnc << 'r'
+          il = vals_range.first(1)[0] + 1
+          iu = vals_range.last(1)[0] + 1
+          _a, _m, vals, vecs, _isuppz, _info = Numo::TinyLinalg::Lapack.send(
+            fnc.to_sym, a.dup, jobz: jobz, range: 'I', il: il, iu: iu
+          )
+        end
       end
+
       vecs = nil if vals_only
+
       [vals, vecs]
     end
 

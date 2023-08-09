@@ -42,6 +42,34 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     m = 3
     n = 5
     x = Numo::DFloat.new(m, n).rand - 0.5
+    a = x.transpose.dot(x)
+    v, w = Numo::TinyLinalg.eigh(a)
+    r = w.transpose.dot(a.dot(w))
+    r = r[r.diag_indices]
+
+    assert((v - r).abs.max < 1e-7)
+
+    v, w = Numo::TinyLinalg.eigh(a, vals_range: (n - m)...n)
+    r = w.transpose.dot(a.dot(w))
+    r = r[r.diag_indices]
+
+    assert((v - r).abs.max < 1e-7)
+
+    x = Numo::DComplex.new(m, n).rand - 0.5
+    a = x.transpose.conjugate.dot(x)
+    v, w = Numo::TinyLinalg.eigh(a, turbo: true)
+    r = w.transpose.conjugate.dot(a.dot(w))
+    r = r[r.diag_indices]
+
+    assert((v - r).abs.max < 1e-7)
+
+    v, w = Numo::TinyLinalg.eigh(a, vals_range: [n - m, n - 1])
+    r = w.transpose.conjugate.dot(a.dot(w))
+    r = r[r.diag_indices]
+
+    assert((v - r).abs.max < 1e-7)
+
+    x = Numo::DFloat.new(m, n).rand - 0.5
     y = Numo::DFloat.new(m, n).rand - 0.5
     a = x.transpose.dot(x)
     b = y.transpose.dot(y) + (n * Numo::DFloat.eye(n))
