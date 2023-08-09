@@ -113,7 +113,25 @@ private:
       return Qnil;
     }
 
+    if (range == 'V' && vu <= vl) {
+      rb_raise(rb_eArgError, "vu must be greater than vl");
+      return Qnil;
+    }
+
     const size_t n = NA_SHAPE(a_nary)[1];
+    if (range == 'I' && (il < 1 || il > n)) {
+      rb_raise(rb_eArgError, "il must satisfy 1 <= il <= n");
+      return Qnil;
+    }
+    if (range == 'I' && (iu < 1 || iu > n)) {
+      rb_raise(rb_eArgError, "iu must satisfy 1 <= iu <= n");
+      return Qnil;
+    }
+    if (range == 'I' && iu < il) {
+      rb_raise(rb_eArgError, "iu must be greater than or equal to il");
+      return Qnil;
+    }
+
     size_t m = range != 'I' ? n : iu - il + 1;
     size_t w_shape[1] = { m };
     size_t z_shape[2] = { n, m };
