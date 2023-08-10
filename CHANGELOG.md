@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [[0.2.0](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.1.2...v0.2.0)] - 2023-08-11
+**Breaking change**
+- Change LAPACK function to call when array b is not given to TinyLinalg.eigh method.
+
 ## [[0.1.2](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.1.1...v0.1.2)] - 2023-08-09
 - Add dsyev, ssyev, zheev, and cheev module functions to TinyLinalg::Lapack.
 - Add dsyevd, ssyevd, zheevd, and cheevd module functions to TinyLinalg::Lapack.
