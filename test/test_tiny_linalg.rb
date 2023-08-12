@@ -114,6 +114,22 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert((e - 1).abs.max < 1e-7)
   end
 
+  def test_cholesky
+    a = Numo::DFloat.new(3, 3).rand - 0.5
+    b = a.transpose.dot(a)
+    u = Numo::TinyLinalg.cholesky(b)
+    error = (b - u.transpose.dot(u)).abs.max
+
+    assert(error < 1e-7)
+
+    a = Numo::SComplex.new(3, 3).rand - 0.5
+    b = a.transpose.conjugate.dot(a)
+    l = Numo::TinyLinalg.cholesky(b, uplo: 'L')
+    error = (b - l.dot(l.transpose.conjugate)).abs.max
+
+    assert(error < 1e-5)
+  end
+
   def test_det
     a = Numo::DFloat[[0, 2, 3], [4, 5, 6], [7, 8, 9]]
     error = (Numo::TinyLinalg.det(a) - 3).abs

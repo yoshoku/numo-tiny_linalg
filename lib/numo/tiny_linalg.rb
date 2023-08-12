@@ -95,6 +95,31 @@ module Numo
       [vals, vecs]
     end
 
+    # Computes the Cholesky decomposition of a symmetric / Hermitian positive-definite matrix.
+    #
+    # @param a [Numo::NArray] The n-by-n symmetric matrix.
+    # @param uplo [String] Whether to compute the upper- or lower-triangular Cholesky factor ('U' or 'L').
+    # @return [Numo::NArray] The upper- or lower-triangular Cholesky factor of a.
+    def cholesky(a, uplo: 'U')
+      raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
+      raise ArgumentError, 'input array a must be square' if a.shape[0] != a.shape[1]
+
+      bchr = blas_char(a)
+      raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
+
+      fnc = "#{bchr}potrf".to_sym
+      c, _info = Numo::TinyLinalg::Lapack.send(fnc, a.dup, uplo: uplo)
+
+      case uplo
+      when 'U'
+        c.triu
+      when 'L'
+        c.tril
+      else
+        raise ArgumentError, "invalid uplo: #{uplo}"
+      end
+    end
+
     # Computes the determinant of matrix.
     #
     # @example
