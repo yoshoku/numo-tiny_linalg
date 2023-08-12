@@ -130,6 +130,17 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert(error < 1e-5)
   end
 
+  def test_cho_solve
+    a = Numo::DFloat.new(3, 3).rand - 0.5
+    c = a.transpose.dot(a)
+    u = Numo::TinyLinalg.cholesky(c)
+    b = Numo::DFloat.new(3, 2).rand - 0.5
+    x = Numo::TinyLinalg.cho_solve(u, b)
+    error = (b - c.dot(x)).abs.max
+
+    assert(error < 1e-7)
+  end
+
   def test_det
     a = Numo::DFloat[[0, 2, 3], [4, 5, 6], [7, 8, 9]]
     error = (Numo::TinyLinalg.det(a) - 3).abs

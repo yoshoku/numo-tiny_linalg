@@ -120,6 +120,25 @@ module Numo
       end
     end
 
+    # Solves linear equation `A * x = b` or `A * X = B` for `x` from cholesky factor `A`.
+    #
+    # @param a [Numo::NArray] The n-by-n cholesky factor.
+    # @param b [Numo::NArray] The n right-hand side vector, or n-by-nrhs right-hand side matrix.
+    # @param uplo [String] Whether to compute the upper- or lower-triangular Cholesky factor ('U' or 'L').
+    # @return [Numo::NArray] The solution vector or matrix `x`.
+    def cho_solve(a, b, uplo: 'U')
+      raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
+      raise ArgumentError, 'input array a must be square' if a.shape[0] != a.shape[1]
+      raise ArgumentError, "incompatible dimensions: a.shape[0] = #{a.shape[0]} != b.shape[0] = #{b.shape[0]}" if a.shape[0] != b.shape[0]
+
+      bchr = blas_char(a, b)
+      raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
+
+      fnc = "#{bchr}potrs".to_sym
+      x, _info = Numo::TinyLinalg::Lapack.send(fnc, a, b.dup, uplo: uplo)
+      x
+    end
+
     # Computes the determinant of matrix.
     #
     # @example
