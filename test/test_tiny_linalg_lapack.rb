@@ -296,6 +296,74 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     assert(error < 1e-5)
   end
 
+  def test_lapack_dpotrf
+    n = 3
+    a = Numo::DFloat.new(n, n).rand - 0.5
+    b = a.transpose.dot(a)
+    c, _info = Numo::TinyLinalg::Lapack.dpotrf(b.dup)
+    cu = c.triu
+    error = (b - cu.transpose.dot(cu)).abs.max
+
+    assert(error < 1e-7)
+
+    c, _info = Numo::TinyLinalg::Lapack.dpotrf(b.dup, uplo: 'L')
+    cl = c.tril
+    error = (b - cl.dot(cl.transpose)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_spotrf
+    n = 3
+    a = Numo::SFloat.new(n, n).rand - 0.5
+    b = a.transpose.dot(a)
+    c, _info = Numo::TinyLinalg::Lapack.spotrf(b.dup)
+    cu = c.triu
+    error = (b - cu.transpose.dot(cu)).abs.max
+
+    assert(error < 1e-5)
+
+    c, _info = Numo::TinyLinalg::Lapack.spotrf(b.dup, uplo: 'L')
+    cl = c.tril
+    error = (b - cl.dot(cl.transpose)).abs.max
+
+    assert(error < 1e-5)
+  end
+
+  def test_lapack_zpotrf
+    n = 3
+    a = Numo::DComplex.new(n, n).rand - 0.5
+    b = a.transpose.conjugate.dot(a)
+    c, _info = Numo::TinyLinalg::Lapack.zpotrf(b.dup)
+    cu = c.triu
+    error = (b - cu.transpose.conjugate.dot(cu)).abs.max
+
+    assert(error < 1e-7)
+
+    c, _info = Numo::TinyLinalg::Lapack.zpotrf(b.dup, uplo: 'L')
+    cl = c.tril
+    error = (b - cl.dot(cl.transpose.conjugate)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_cpotrf
+    n = 3
+    a = Numo::SComplex.new(n, n).rand - 0.5
+    b = a.transpose.conjugate.dot(a)
+    c, _info = Numo::TinyLinalg::Lapack.cpotrf(b.dup)
+    cu = c.triu
+    error = (b - cu.transpose.conjugate.dot(cu)).abs.max
+
+    assert(error < 1e-5)
+
+    c, _info = Numo::TinyLinalg::Lapack.cpotrf(b.dup, uplo: 'L')
+    cl = c.tril
+    error = (b - cl.dot(cl.transpose.conjugate)).abs.max
+
+    assert(error < 1e-5)
+  end
+
   def test_lapack_dsyev
     n = 5
     a = Numo::DFloat.new(n, n).rand - 0.5
