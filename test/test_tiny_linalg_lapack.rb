@@ -364,6 +364,54 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     assert(error < 1e-5)
   end
 
+  def test_lapack_dpotrs
+    n = 5
+    a = Numo::DFloat.new(n, n).rand
+    c = a.transpose.dot(a)
+    b = Numo::DFloat.new(n).rand - 0.5
+    f, = Numo::TinyLinalg::Lapack.dpotrf(c.dup)
+    x, _info = Numo::TinyLinalg::Lapack.dpotrs(f, b.dup)
+    error = (b - c.dot(x)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_spotrs
+    n = 5
+    a = Numo::DFloat.new(n, n).rand
+    c = a.transpose.dot(a)
+    b = Numo::DFloat.new(n).rand - 0.5
+    f, = Numo::TinyLinalg::Lapack.spotrf(c.dup, uplo: 'L')
+    x, _info = Numo::TinyLinalg::Lapack.spotrs(f, b.dup, uplo: 'L')
+    error = (b - c.dot(x)).abs.max
+
+    assert(error < 1e-5)
+  end
+
+  def test_lapack_zpotrs
+    n = 5
+    a = Numo::DComplex.new(n, n).rand - 0.5
+    c = a.transpose.conjugate.dot(a)
+    b = Numo::DComplex.new(n).rand - 0.5
+    f, = Numo::TinyLinalg::Lapack.zpotrf(c.dup, uplo: 'L')
+    x, _info = Numo::TinyLinalg::Lapack.zpotrs(f, b.dup, uplo: 'L')
+    error = (b - c.dot(x)).abs.max
+
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_cpotrs
+    n = 5
+    a = Numo::SComplex.new(n, n).rand - 0.5
+    c = a.transpose.conjugate.dot(a)
+    b = Numo::SComplex.new(n).rand - 0.5
+    f, = Numo::TinyLinalg::Lapack.cpotrf(c.dup)
+    x, _info = Numo::TinyLinalg::Lapack.cpotrs(f, b.dup)
+    error = (b - c.dot(x)).abs.max
+
+    assert(error < 1e-5)
+  end
+
   def test_lapack_dsyev
     n = 5
     a = Numo::DFloat.new(n, n).rand - 0.5
