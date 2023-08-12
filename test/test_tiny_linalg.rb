@@ -4,7 +4,7 @@ require 'test_helper'
 
 class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
   def setup
-    Numo::NArray.srand(Minitest.seed)
+    Numo::NArray.srand(53_196)
   end
 
   def test_that_it_has_a_version_number

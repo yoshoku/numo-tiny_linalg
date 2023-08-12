@@ -4,7 +4,7 @@ require 'test_helper'
 
 class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLength
   def setup
-    Numo::NArray.srand(Minitest.seed)
+    Numo::NArray.srand(53_196)
   end
 
   def test_lapack_dgeqrf_dorgqr
