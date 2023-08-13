@@ -458,5 +458,110 @@ module Numo
 
       [s, u, vt]
     end
+
+    # @!visibility private
+    def matmul(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def matrix_power(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def svdvals(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def orth(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def null_space(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def lu(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def lu_fact(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def lu_inv(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def lu_solve(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def ldl(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def cho_fact(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def cho_inv(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def eig(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def eigvals(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def eigvalsh(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def norm(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def cond(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def slogdet(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def matrix_rank(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def lstsq(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
+
+    # @!visibility private
+    def expm(*args)
+      raise NotImplementedError, "#{__method__} is not yet implemented in Numo::TinyLinalg"
+    end
   end
 end
