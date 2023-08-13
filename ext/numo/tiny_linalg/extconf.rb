@@ -31,13 +31,6 @@ end
 abort 'libstdc++ is not found.' unless have_library('stdc++')
 $CXXFLAGS << ' -std=c++11'
 
-# NOTE: Accelerate framework does not support LAPACKE.
-# use_accelerate = false
-# if RUBY_PLATFORM.include?('darwin') && have_framework('Accelerate')
-#   $CFLAGS << ' -DTINYLINALG_USE_ACCELERATE'
-#   use_accelerate = true
-# end
-
 build_openblas = false
 unless find_library('openblas', 'LAPACKE_dsyevr')
   build_openblas = true unless have_library('openblas')
