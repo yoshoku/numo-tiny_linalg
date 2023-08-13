@@ -97,6 +97,37 @@ module Numo
 
     # Computes the Cholesky decomposition of a symmetric / Hermitian positive-definite matrix.
     #
+    # @example
+    #   require 'numo/tiny_linalg'
+    #
+    #   Numo::Linalg = Numo::TinyLinalg unless defined?(Numo::Linalg)
+    #
+    #   s = Numo::DFloat.new(3, 3).rand - 0.5
+    #   a = s.transpose.dot(s)
+    #   u = Numo::Linalg.cholesky(a)
+    #
+    #   pp u
+    #   # =>
+    #   # Numo::DFloat#shape=[3,3]
+    #   # [[0.532006, 0.338183, -0.18036],
+    #   #  [0, 0.325153, 0.011721],
+    #   #  [0, 0, 0.436738]]
+    #
+    #   pp (a - u.transpose.dot(u)).abs.max
+    #   # => 1.3877787807814457e-17
+    #
+    #   l = Numo::Linalg.cholesky(a, uplo: 'L')
+    #
+    #   pp l
+    #   # =>
+    #   # Numo::DFloat#shape=[3,3]
+    #   # [[0.532006, 0, 0],
+    #   #  [0.338183, 0.325153, 0],
+    #   #  [-0.18036, 0.011721, 0.436738]]
+    #
+    #   pp (a - l.dot(l.transpose)).abs.max
+    #   # => 1.3877787807814457e-17
+    #
     # @param a [Numo::NArray] The n-by-n symmetric matrix.
     # @param uplo [String] Whether to compute the upper- or lower-triangular Cholesky factor ('U' or 'L').
     # @return [Numo::NArray] The upper- or lower-triangular Cholesky factor of a.
@@ -120,12 +151,27 @@ module Numo
       end
     end
 
-    # Solves linear equation `A * x = b` or `A * X = B` for `x` from cholesky factor `A`.
+    # Solves linear equation `A * x = b` or `A * X = B` for `x` with the Cholesky factorization of `A`.
+    #
+    # @example
+    #   require 'numo/tiny_linalg'
+    #
+    #   Numo::Linalg = Numo::TinyLinalg unless defined?(Numo::Linalg)
+    #
+    #   s = Numo::DFloat.new(3, 3).rand - 0.5
+    #   a = s.transpose.dot(s)
+    #   u = Numo::Linalg.cholesky(a)
+    #
+    #   b = Numo::DFloat.new(3).rand
+    #   x = Numo::Linalg.cho_solve(u, b)
+    #
+    #   puts (b - a.dot(x)).abs.max
+    #   => 0.0
     #
     # @param a [Numo::NArray] The n-by-n cholesky factor.
     # @param b [Numo::NArray] The n right-hand side vector, or n-by-nrhs right-hand side matrix.
     # @param uplo [String] Whether to compute the upper- or lower-triangular Cholesky factor ('U' or 'L').
-    # @return [Numo::NArray] The solution vector or matrix `x`.
+    # @return [Numo::NArray] The solution vector or matrix `X`.
     def cho_solve(a, b, uplo: 'U')
       raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
       raise ArgumentError, 'input array a must be square' if a.shape[0] != a.shape[1]
@@ -315,7 +361,7 @@ module Numo
       [q, r]
     end
 
-    # Solves linear equation `A * x = b` or `A * X = B` for `x` from square matrix `a`.
+    # Solves linear equation `A * x = b` or `A * X = B` for `x` from square matrix `A`.
     #
     # @example
     #   require 'numo/tiny_linalg'
@@ -338,10 +384,10 @@ module Numo
     #   # => 2.1081041547796492e-16
     #
     # @param a [Numo::NArray] The n-by-n square matrix.
-    # @param b [Numo::NArray] The n right-hand side vector, or n-by-nrhs right-hand side matrix (>= 1-dimensinal NArray).
+    # @param b [Numo::NArray] The n right-hand side vector, or n-by-nrhs right-hand side matrix.
     # @param driver [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
     # @param uplo [String] This argument is for compatibility with Numo::Linalg.solver, and is not used.
-    # @return [Numo::NArray] The solusion vector / matrix `x`.
+    # @return [Numo::NArray] The solusion vector / matrix `X`.
     def solve(a, b, driver: 'gen', uplo: 'U') # rubocop:disable Lint/UnusedMethodArgument
       raise ArgumentError, 'input array a must be 2-dimensional' if a.ndim != 2
       raise ArgumentError, 'input array a must be square' if a.shape[0] != a.shape[1]
