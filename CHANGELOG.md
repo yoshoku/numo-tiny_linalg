@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [[0.3.0](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.2.0...v0.3.0)] - 2023-08-13
+- Add cholesky and cho_solve module functions to TinyLinalg.
+
+**Breaking change**
+- Change to raise NotImplementedError when calling a method not yet implemented in Numo::TinyLinalg.
+
 ## [[0.2.0](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.1.2...v0.2.0)] - 2023-08-11
 **Breaking change**
 - Change LAPACK function to call when array b is not given to TinyLinalg.eigh method.

@@ -6,7 +6,7 @@
 [![Documentation](https://img.shields.io/badge/api-reference-blue.svg)](https://yoshoku.github.io/numo-tiny_linalg/doc/)
 
 Numo::TinyLinalg is a subset library from [Numo::Linalg](https://github.com/ruby-numo/numo-linalg) consisting only of methods used in Machine Learning algorithms.
-The functions Numo::TinyLinalg supports are dot, det, eigh, inv, pinv, qr, solve, and svd.
+The functions Numo::TinyLinalg supports are dot, det, eigh, inv, pinv, qr, solve, cholesky, cho_solve and svd.
 
 Note that the version numbering rule of Numo::TinyLinalg is not compatible with that of Numo::Linalg.
 
