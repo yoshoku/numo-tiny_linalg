@@ -248,6 +248,9 @@ extern "C" void Init_tiny_linalg(void) {
    */
   rb_mTinyLinalgLapack = rb_define_module_under(rb_mTinyLinalg, "Lapack");
 
+  /* The version of OpenBLAS used in background library. */
+  rb_define_const(rb_mTinyLinalg, "OPENBLAS_VERSION", rb_str_new_cstr(OPENBLAS_VERSION));
+
   /**
    * Returns BLAS char ([sdcz]) defined by data-type of arguments.
    *

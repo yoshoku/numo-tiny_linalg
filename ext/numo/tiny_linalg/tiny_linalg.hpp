@@ -33,6 +33,7 @@
 
 #include <cblas.h>
 #include <lapacke.h>
+#include <openblas_config.h>
 
 #include <string>
 
