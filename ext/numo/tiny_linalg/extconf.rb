@@ -18,7 +18,9 @@ end
 
 abort 'numo/narray.h is not found' unless have_header('numo/narray.h')
 
-if RUBY_PLATFORM.match?(/mswin|cygwin|mingw/)
+on_windows = RUBY_PLATFORM.match?(/mswin|cygwin|mingw/)
+
+if on_windows
   $LOAD_PATH.each do |lp|
     if File.exist?(File.join(lp, 'numo/libnarray.a'))
       $LDFLAGS = "-L#{lp}/numo #{$LDFLAGS}"
@@ -44,6 +46,7 @@ if build_openblas
   warn 'BLAS and LAPACKE APIs are not found. Downloading and Building OpenBLAS...'
 
   VENDOR_DIR = File.expand_path("#{__dir__}/../../../vendor")
+  TINYLINALG_DIR = File.expand_path("#{__dir__}/../../../lib/numo/tiny_linalg")
   OPENBLAS_VER = '0.3.23'
   OPENBLAS_KEY = '115634b39007de71eb7e75cf7591dfb2'
   OPENBLAS_URI = "https://github.com/xianyi/OpenBLAS/archive/v#{OPENBLAS_VER}.tar.gz"
@@ -75,11 +78,14 @@ if build_openblas
       File.open("#{VENDOR_DIR}/tmp/openblas.log", 'a') { |f| f.puts(insstdout) }
       abort("Failed to install OpenBLAS. Check the openblas.log file for more details: #{VENDOR_DIR}/tmp/openblas.log") unless insstatus.success?
 
+      FileUtils.cp("#{VENDOR_DIR}/lib/libopenblas.a", TINYLINALG_DIR) if on_windows
+
       FileUtils.touch("#{VENDOR_DIR}/installed_#{OPENBLAS_VER}")
     end
   end
 
-  abort('libopenblas is not found.') unless find_library('openblas', nil, "#{VENDOR_DIR}/lib")
+  libopenblas_dir = on_windows ? TINYLINALG_DIR : "#{VENDOR_DIR}/lib"
+  abort('libopenblas is not found.') unless find_library('openblas', nil, libopenblas_dir)
   abort('openblas_config.h is not found.') unless find_header('openblas_config.h', nil, "#{VENDOR_DIR}/include")
   abort('cblas.h is not found.') unless find_header('cblas.h', nil, "#{VENDOR_DIR}/include")
   abort('lapacke.h is not found.') unless find_header('lapacke.h', nil, "#{VENDOR_DIR}/include")
