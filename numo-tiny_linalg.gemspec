@@ -13,6 +13,7 @@ Gem::Specification.new do |spec|
   MSG
   spec.description = <<~MSG
     Numo::TinyLinalg is a subset library from Numo::Linalg consisting only of methods used in Machine Learning algorithms.
+    The functions Numo::TinyLinalg supports are dot, det, eigh, inv, pinv, qr, solve, cholesky, cho_solve and svd.
   MSG
   spec.homepage = 'https://github.com/yoshoku/numo-tiny_linalg'
   spec.license = 'BSD-3-Clause'
