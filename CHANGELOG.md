@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [[0.3.2](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.1...v0.4.0)] - 2023-09-04
+- Bump OpenBLAS to be downloaded from 0.3.23 to 0.3.24.
+
 ## [[0.3.1](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.0...v0.3.1)] - 2023-08-15
 - Support automatic build of OpenBLAS on Windows.
   - The author does not have a Windows PC. It will probably work.
