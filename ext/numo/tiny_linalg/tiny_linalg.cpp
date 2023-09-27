@@ -127,8 +127,7 @@ static VALUE tiny_linalg_blas_call(int argc, VALUE* argv, VALUE self) {
     return Qnil;
   }
 
-  std::string type_str{ type };
-  std::string fn_str = type_str + std::string(rb_id2name(rb_to_id(rb_to_symbol(fn_name))));
+  std::string fn_str = type + std::string(rb_id2name(rb_to_id(rb_to_symbol(fn_name))));
   ID fn_id = rb_intern(fn_str.c_str());
   size_t n = RARRAY_LEN(nary_arr);
   VALUE ret = Qnil;
