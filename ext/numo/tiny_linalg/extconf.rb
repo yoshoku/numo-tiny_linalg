@@ -31,7 +31,6 @@ if on_windows
 end
 
 abort 'libstdc++ is not found.' unless have_library('stdc++')
-$CXXFLAGS << ' -std=c++11'
 
 build_openblas = false
 unless find_library('openblas', 'LAPACKE_dsyevr')
