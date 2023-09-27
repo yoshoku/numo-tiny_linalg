@@ -1,6 +1,9 @@
 ## [Unreleased]
 
-## [[0.3.2](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.1...v0.4.0)] - 2023-09-04
+## [[0.3.3](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.2...v0.3.3)] - 2023-09-27
+- Remove unnecessary `-std=c++11` option.
+
+## [[0.3.2](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.1...v0.3.2)] - 2023-09-04
 - Bump OpenBLAS to be downloaded from 0.3.23 to 0.3.24.
 
 ## [[0.3.1](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.0...v0.3.1)] - 2023-08-15
