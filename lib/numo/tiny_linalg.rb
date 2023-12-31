@@ -138,7 +138,7 @@ module Numo
       bchr = blas_char(a)
       raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
 
-      fnc = "#{bchr}potrf".to_sym
+      fnc = :"#{bchr}potrf"
       c, _info = Numo::TinyLinalg::Lapack.send(fnc, a.dup, uplo: uplo)
 
       case uplo
@@ -180,7 +180,7 @@ module Numo
       bchr = blas_char(a, b)
       raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
 
-      fnc = "#{bchr}potrs".to_sym
+      fnc = :"#{bchr}potrs"
       x, _info = Numo::TinyLinalg::Lapack.send(fnc, a, b.dup, uplo: uplo)
       x
     end
@@ -205,7 +205,7 @@ module Numo
       bchr = blas_char(a)
       raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
 
-      getrf = "#{bchr}getrf".to_sym
+      getrf = :"#{bchr}getrf"
       lu, piv, info = Numo::TinyLinalg::Lapack.send(getrf, a.dup)
 
       if info.zero?
@@ -248,8 +248,8 @@ module Numo
       bchr = blas_char(a)
       raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
 
-      getrf = "#{bchr}getrf".to_sym
-      getri = "#{bchr}getri".to_sym
+      getrf = :"#{bchr}getrf"
+      getri = :"#{bchr}getri"
 
       lu, piv, info = Numo::TinyLinalg::Lapack.send(getrf, a.dup)
       if info.zero?
@@ -336,7 +336,7 @@ module Numo
       bchr = blas_char(a)
       raise ArgumentError, "invalid array type: #{a.class}" if bchr == 'n'
 
-      geqrf = "#{bchr}geqrf".to_sym
+      geqrf = :"#{bchr}geqrf"
       qr, tau, = Numo::TinyLinalg::Lapack.send(geqrf, a.dup)
 
       return [qr, tau] if mode == 'raw'
@@ -346,7 +346,7 @@ module Numo
 
       return r if mode == 'r'
 
-      org_ung_qr = %w[d s].include?(bchr) ? "#{bchr}orgqr".to_sym : "#{bchr}ungqr".to_sym
+      org_ung_qr = %w[d s].include?(bchr) ? :"#{bchr}orgqr" : :"#{bchr}ungqr"
 
       q = if m < n
             Numo::TinyLinalg::Lapack.send(org_ung_qr, qr[true, 0...m], tau)[0]
@@ -395,7 +395,7 @@ module Numo
       bchr = blas_char(a, b)
       raise ArgumentError, "invalid array type: #{a.class}, #{b.class}" if bchr == 'n'
 
-      gesv = "#{bchr}gesv".to_sym
+      gesv = :"#{bchr}gesv"
       Numo::TinyLinalg::Lapack.send(gesv, a.dup, b.dup)[1]
     end
 
@@ -443,10 +443,10 @@ module Numo
 
       case driver.to_s
       when 'sdd'
-        gesdd = "#{bchr}gesdd".to_sym
+        gesdd = :"#{bchr}gesdd"
         s, u, vt, info = Numo::TinyLinalg::Lapack.send(gesdd, a.dup, jobz: job)
       when 'svd'
-        gesvd = "#{bchr}gesvd".to_sym
+        gesvd = :"#{bchr}gesvd"
         s, u, vt, info = Numo::TinyLinalg::Lapack.send(gesvd, a.dup, jobu: job, jobvt: job)
       else
         raise ArgumentError, "invalid driver: #{driver}"
