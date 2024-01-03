@@ -1,4 +1,7 @@
 ## [Unreleased]
+## [[0.3.5](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.4...v0.3.5)] - 2024-01-03
+- Bump OpenBLAS to be downloaded from 0.3.25 to 0.3.26.
+- Minor changes using RuboCop.
 
 ## [[0.3.4](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.3...v0.3.4)] - 2023-11-19
 - Bump OpenBLAS to be downloaded from 0.3.24 to 0.3.25.
