@@ -83,8 +83,7 @@ if build_openblas
     end
   end
 
-  libopenblas_dir = on_windows ? TINYLINALG_DIR : "#{VENDOR_DIR}/lib"
-  abort('libopenblas is not found.') unless find_library('openblas', nil, libopenblas_dir)
+  abort('libopenblas is not found.') unless find_library('openblas', nil, "#{VENDOR_DIR}/lib")
   abort('openblas_config.h is not found.') unless find_header('openblas_config.h', nil, "#{VENDOR_DIR}/include")
   abort('cblas.h is not found.') unless find_header('cblas.h', nil, "#{VENDOR_DIR}/include")
   abort('lapacke.h is not found.') unless find_header('lapacke.h', nil, "#{VENDOR_DIR}/include")
