@@ -296,6 +296,50 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     assert(error < 1e-5)
   end
 
+  def test_lapack_dtrtrs
+    n = 5
+    a = Numo::DFloat.new(n, n).rand.triu
+    b = Numo::DFloat.new(n).rand - 0.5
+    x, info = Numo::TinyLinalg::Lapack.dtrtrs(a, b.dup)
+    error = (b - a.dot(x)).abs.max
+
+    assert_equal(0, info)
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_strtrs
+    n = 5
+    a = Numo::SFloat.new(n, n).rand.tril
+    b = Numo::SFloat.new(n).rand - 0.5
+    x, info = Numo::TinyLinalg::Lapack.strtrs(a, b.dup, uplo: 'L')
+    error = (b - a.dot(x)).abs.max
+
+    assert_equal(0, info)
+    assert(error < 1e-5)
+  end
+
+  def test_lapack_ztrtrs
+    n = 5
+    a = Numo::DComplex.new(n, n).rand.triu
+    b = Numo::DComplex.new(n).rand - 0.5
+    x, info = Numo::TinyLinalg::Lapack.ztrtrs(a, b.dup)
+    error = (b - a.dot(x)).abs.max
+
+    assert_equal(0, info)
+    assert(error < 1e-7)
+  end
+
+  def test_lapack_ctrtrs
+    n = 5
+    a = Numo::SComplex.new(n, n).rand.tril
+    b = Numo::SComplex.new(n).rand - 0.5
+    x, info = Numo::TinyLinalg::Lapack.ctrtrs(a, b.dup, uplo: 'L')
+    error = (b - a.dot(x)).abs.max
+
+    assert_equal(0, info)
+    assert(error < 1e-5)
+  end
+
   def test_lapack_dpotrf
     n = 3
     a = Numo::DFloat.new(n, n).rand - 0.5

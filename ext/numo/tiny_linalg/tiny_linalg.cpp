@@ -44,6 +44,7 @@
 #include "lapack/gesvd.hpp"
 #include "lapack/getrf.hpp"
 #include "lapack/getri.hpp"
+#include "lapack/trtrs.hpp"
 #include "lapack/heev.hpp"
 #include "lapack/heevd.hpp"
 #include "lapack/heevr.hpp"
@@ -314,6 +315,10 @@ extern "C" void Init_tiny_linalg(void) {
   TinyLinalg::GeTri<TinyLinalg::numo_cSFloatId, float, TinyLinalg::SGeTri>::define_module_function(rb_mTinyLinalgLapack, "sgetri");
   TinyLinalg::GeTri<TinyLinalg::numo_cDComplexId, lapack_complex_double, TinyLinalg::ZGeTri>::define_module_function(rb_mTinyLinalgLapack, "zgetri");
   TinyLinalg::GeTri<TinyLinalg::numo_cSComplexId, lapack_complex_float, TinyLinalg::CGeTri>::define_module_function(rb_mTinyLinalgLapack, "cgetri");
+  TinyLinalg::TrTrs<TinyLinalg::numo_cDFloatId, double, TinyLinalg::DTrTrs>::define_module_function(rb_mTinyLinalgLapack, "dtrtrs");
+  TinyLinalg::TrTrs<TinyLinalg::numo_cSFloatId, float, TinyLinalg::STrTrs>::define_module_function(rb_mTinyLinalgLapack, "strtrs");
+  TinyLinalg::TrTrs<TinyLinalg::numo_cDComplexId, lapack_complex_double, TinyLinalg::ZTrTrs>::define_module_function(rb_mTinyLinalgLapack, "ztrtrs");
+  TinyLinalg::TrTrs<TinyLinalg::numo_cSComplexId, lapack_complex_float, TinyLinalg::CTrTrs>::define_module_function(rb_mTinyLinalgLapack, "ctrtrs");
   TinyLinalg::PoTrf<TinyLinalg::numo_cDFloatId, double, TinyLinalg::DPoTrf>::define_module_function(rb_mTinyLinalgLapack, "dpotrf");
   TinyLinalg::PoTrf<TinyLinalg::numo_cSFloatId, float, TinyLinalg::SPoTrf>::define_module_function(rb_mTinyLinalgLapack, "spotrf");
   TinyLinalg::PoTrf<TinyLinalg::numo_cDComplexId, lapack_complex_double, TinyLinalg::ZPoTrf>::define_module_function(rb_mTinyLinalgLapack, "zpotrf");
