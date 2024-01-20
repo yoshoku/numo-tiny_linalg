@@ -799,4 +799,48 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     assert(mi < n)
     # assert(mv < n)
   end
+
+  def test_lapack_dlange
+    a = Numo::DFloat.new(4, 3).rand - 0.5
+    norm = Numo::TinyLinalg::Lapack.dlange(a)
+    error_f = (norm - Math.sqrt(a.dot(a.transpose).trace)).abs
+    norm = Numo::TinyLinalg::Lapack.dlange(a, norm: 'M')
+    error_m = (norm - a.abs.max).abs
+
+    assert(error_f < 1e-7)
+    assert(error_m < 1e-7)
+  end
+
+  def test_lapack_slange
+    a = Numo::SFloat.new(4, 3).rand - 0.5
+    norm = Numo::TinyLinalg::Lapack.dlange(a)
+    error_f = (norm - Math.sqrt(a.dot(a.transpose).trace)).abs
+    norm = Numo::TinyLinalg::Lapack.dlange(a, norm: 'M')
+    error_m = (norm - a.abs.max).abs
+
+    assert(error_f < 1e-5)
+    assert(error_m < 1e-5)
+  end
+
+  def test_lapack_zlange
+    a = Numo::DComplex.new(4, 3).rand - 0.5
+    norm = Numo::TinyLinalg::Lapack.zlange(a)
+    error_f = (norm - Math.sqrt(a.dot(a.transpose.conjugate).trace)).abs
+    norm = Numo::TinyLinalg::Lapack.zlange(a, norm: 'M')
+    error_m = (norm - a.abs.max).abs
+
+    assert(error_f < 1e-7)
+    assert(error_m < 1e-7)
+  end
+
+  def test_lapack_clange
+    a = Numo::SComplex.new(4, 3).rand - 0.5
+    norm = Numo::TinyLinalg::Lapack.clange(a)
+    error_f = (norm - Math.sqrt(a.dot(a.transpose.conjugate).trace)).abs
+    norm = Numo::TinyLinalg::Lapack.clange(a, norm: 'M')
+    error_m = (norm - a.abs.max).abs
+
+    assert(error_f < 1e-5)
+    assert(error_m < 1e-5)
+  end
 end

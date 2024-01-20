@@ -44,13 +44,13 @@
 #include "lapack/gesvd.hpp"
 #include "lapack/getrf.hpp"
 #include "lapack/getri.hpp"
-#include "lapack/trtrs.hpp"
 #include "lapack/heev.hpp"
 #include "lapack/heevd.hpp"
 #include "lapack/heevr.hpp"
 #include "lapack/hegv.hpp"
 #include "lapack/hegvd.hpp"
 #include "lapack/hegvx.hpp"
+#include "lapack/lange.hpp"
 #include "lapack/orgqr.hpp"
 #include "lapack/potrf.hpp"
 #include "lapack/potrs.hpp"
@@ -60,6 +60,7 @@
 #include "lapack/sygv.hpp"
 #include "lapack/sygvd.hpp"
 #include "lapack/sygvx.hpp"
+#include "lapack/trtrs.hpp"
 #include "lapack/ungqr.hpp"
 
 VALUE rb_mTinyLinalg;
@@ -359,6 +360,10 @@ extern "C" void Init_tiny_linalg(void) {
   TinyLinalg::SyGvx<TinyLinalg::numo_cSFloatId, float, TinyLinalg::SSyGvx>::define_module_function(rb_mTinyLinalgLapack, "ssygvx");
   TinyLinalg::HeGvx<TinyLinalg::numo_cDComplexId, TinyLinalg::numo_cDFloatId, lapack_complex_double, double, TinyLinalg::ZHeGvx>::define_module_function(rb_mTinyLinalgLapack, "zhegvx");
   TinyLinalg::HeGvx<TinyLinalg::numo_cSComplexId, TinyLinalg::numo_cSFloatId, lapack_complex_float, float, TinyLinalg::CHeGvx>::define_module_function(rb_mTinyLinalgLapack, "chegvx");
+  TinyLinalg::LanGe<TinyLinalg::numo_cDFloatId, double, TinyLinalg::DLanGe>::define_module_function(rb_mTinyLinalgLapack, "dlange");
+  TinyLinalg::LanGe<TinyLinalg::numo_cSFloatId, float, TinyLinalg::SLanGe>::define_module_function(rb_mTinyLinalgLapack, "slange");
+  TinyLinalg::LanGe<TinyLinalg::numo_cDComplexId, lapack_complex_double, TinyLinalg::ZLanGe>::define_module_function(rb_mTinyLinalgLapack, "zlange");
+  TinyLinalg::LanGe<TinyLinalg::numo_cSComplexId, lapack_complex_float, TinyLinalg::CLanGe>::define_module_function(rb_mTinyLinalgLapack, "clange");
 
   rb_define_alias(rb_singleton_class(rb_mTinyLinalgBlas), "znrm2", "dznrm2");
   rb_define_alias(rb_singleton_class(rb_mTinyLinalgBlas), "cnrm2", "scnrm2");
