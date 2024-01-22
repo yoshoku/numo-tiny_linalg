@@ -114,6 +114,61 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     assert((e - 1).abs.max < 1e-7)
   end
 
+  def test_norm
+    # empty array
+    assert_equal(0, Numo::TinyLinalg.norm([]))
+    assert_equal(0, Numo::TinyLinalg.norm(Numo::DFloat[]))
+
+    # vector
+    a = Numo::DFloat[3, -4]
+    b = Numo::DFloat[1, 0, 2, 0, 3]
+
+    assert_equal(5, Numo::TinyLinalg.norm(a))
+    assert_equal(5, Numo::TinyLinalg.norm(a, 2))
+    assert_equal(7, Numo::TinyLinalg.norm(a, 1))
+    assert_equal(3, Numo::TinyLinalg.norm(b, 0))
+    assert_in_delta(2.4, Numo::TinyLinalg.norm(a, -2))
+    assert_equal(4, Numo::TinyLinalg.norm(a, Float::INFINITY))
+    assert_equal(3, Numo::TinyLinalg.norm(a, -Float::INFINITY))
+    assert_equal(4, Numo::TinyLinalg.norm(a, 'inf'))
+    assert_equal(3, Numo::TinyLinalg.norm(a, '-inf'))
+    assert_equal(Numo::DFloat[5], Numo::TinyLinalg.norm(a, keepdims: true))
+    assert_equal(Numo::DFloat[5], Numo::TinyLinalg.norm(a, 2, keepdims: true))
+    assert_equal(5, Numo::TinyLinalg.norm(a, axis: 0))
+    assert_match(/axis is out of range/, assert_raises(ArgumentError) { Numo::TinyLinalg.norm(a, axis: 1) }.message)
+    assert_match(/invalid axis/, assert_raises(ArgumentError) { Numo::TinyLinalg.norm(a, axis: '1') }.message)
+
+    # matrix
+    a = Numo::DFloat[[1, 2, -3, 1], [-4, 1, 8, 2]]
+
+    assert_equal(10, Numo::TinyLinalg.norm(a))
+    assert_equal(10, Numo::TinyLinalg.norm(a, 'fro'))
+    assert((Numo::TinyLinalg.norm(a, 'nuc') - 12.3643).abs < 1e-4)
+    assert((Numo::TinyLinalg.norm(a, 2) - 9.6144).abs < 1e-4)
+    assert_equal(11, Numo::TinyLinalg.norm(a, 1))
+    assert_match(/invalid ord/, assert_raises(ArgumentError) { Numo::TinyLinalg.norm(a, 0) }.message)
+    assert_equal(3, Numo::TinyLinalg.norm(a, -1))
+    assert((Numo::TinyLinalg.norm(a, -2) - 2.7498).abs < 1e-4)
+    assert_equal(15, Numo::TinyLinalg.norm(a, Float::INFINITY))
+    assert_equal(7, Numo::TinyLinalg.norm(a, -Float::INFINITY))
+    assert_equal(15, Numo::TinyLinalg.norm(a, 'inf'))
+    assert_equal(7, Numo::TinyLinalg.norm(a, '-inf'))
+    assert_equal(Numo::DFloat[[10]], Numo::TinyLinalg.norm(a, keepdims: true))
+    assert_equal(Numo::DFloat[5, 3, 11, 3], Numo::TinyLinalg.norm(a, 1, axis: 0))
+    assert_equal(Numo::DFloat[7, 15], Numo::TinyLinalg.norm(a, 1, axis: 1))
+    assert_equal(Numo::DFloat[[5, 3, 11, 3]], Numo::TinyLinalg.norm(a, 1, axis: 0, keepdims: true))
+    assert_equal(Numo::DFloat[[7], [15]], Numo::TinyLinalg.norm(a, 1, axis: 1, keepdims: true))
+    assert_equal(10, Numo::TinyLinalg.norm(a, 'fro', axis: [0, 1]))
+    assert_equal(11, Numo::TinyLinalg.norm(a, 1, axis: [0, 1]))
+    assert_equal(Numo::DFloat[[15]], Numo::TinyLinalg.norm(a, Float::INFINITY, axis: [0, 1], keepdims: true))
+
+    # tensor
+    a = Numo::DFloat[[[2, 3, 1], [1, 2, 4]], [[2, 2, 3], [3, 2, 4]]]
+
+    assert_equal(9, Numo::TinyLinalg.norm(a))
+    assert_equal(Numo::DFloat[[[9]]], Numo::TinyLinalg.norm(a, keepdims: true))
+  end
+
   def test_cholesky
     a = Numo::DFloat.new(3, 3).rand - 0.5
     b = a.transpose.dot(a)
