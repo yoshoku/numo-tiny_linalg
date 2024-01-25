@@ -28,6 +28,9 @@ Metrics/BlockLength:
     - 'test/**/*'
     - '*.gemspec'
 
+Metrics/BlockNesting:
+  Max: 5
+
 Metrics/CyclomaticComplexity:
   Max: 16
 
