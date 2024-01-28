@@ -1,4 +1,12 @@
 ## [Unreleased]
+## [[0.3.6](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.5...v0.3.6)] - 2024-01-28
+
+- Add solve_triangular module function to TinyLinalg.
+  - The solve_triangular is not implemented in Numo::Linalg, but I have implemented it because it uses some machine learning algorithms.
+- Add dtrtrs, strtrs, ztrtrs, and ctrtrs module functions to TinyLinalg::Lapack.
+- Add norm module function to TinyLinalg.
+- Add dlange, slange, zlange, and clange module functions to TinyLinalg::Lapack.
+
 ## [[0.3.5](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.4...v0.3.5)] - 2024-01-03
 - Bump OpenBLAS to be downloaded from 0.3.25 to 0.3.26.
 - Minor changes using RuboCop.
