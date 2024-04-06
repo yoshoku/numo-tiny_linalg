@@ -1,4 +1,9 @@
 ## [Unreleased]
+
+## [[0.3.7](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.6...v0.3.7)] - 2024-04-06
+
+- Bump OpenBLAS to be downloaded from 0.3.26 to 0.3.27.
+
 ## [[0.3.6](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.5...v0.3.6)] - 2024-01-28
 
 - Add solve_triangular module function to TinyLinalg.
