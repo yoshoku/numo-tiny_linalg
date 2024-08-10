@@ -28,15 +28,15 @@ jobs:
 
   build-win:
     runs-on: windows-latest
-    name: Ruby 3.2 (Windows)
+    name: Ruby 3.3 (Windows)
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Ruby 3.2
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2
+          ruby-version: 3.3
           bundler-cache: true
-      - name: Install BLAS and LAPACK
+      - name: Install OpenBLAS and LAPACK
         run: pacman -S --noconfirm mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-lapack
       - name: Run the default task
         run: |
@@ -45,7 +45,7 @@ jobs:
 
   build-mac:
     runs-on: macos-latest
-    name: Ruby 3.2 (macOS)
+    name: Ruby 3.3 (macOS)
     steps:
     - uses: actions/checkout@v4
     - name: Install OpenBLAS
@@ -56,7 +56,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.2
+        ruby-version: 3.3
         bundler-cache: true
     - name: Run the default task
       run: |
