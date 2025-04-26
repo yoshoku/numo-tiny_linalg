@@ -69,7 +69,7 @@ if build_openblas
     end
 
     Dir.chdir("#{VENDOR_DIR}/tmp/OpenBLAS-#{OPENBLAS_VER}") do
-      mkstdout, _mkstderr, mkstatus = Open3.capture3("make -j#{Etc.nprocessors}")
+      mkstdout, _mkstderr, mkstatus = Open3.capture3("make -j#{Etc.nprocessors} shared")
       File.open("#{VENDOR_DIR}/tmp/openblas.log", 'w') { |f| f.puts(mkstdout) }
       abort("Failed to build OpenBLAS. Check the openblas.log file for more details: #{VENDOR_DIR}/tmp/openblas.log") unless mkstatus.success?
 
