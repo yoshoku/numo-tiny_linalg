@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [[0.4.0](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.9...v0.4.0)] - 2025-04-27
+
+- Add `shared` target to make command of OpenBLAS for reducing build time.
+
 ## [[0.3.9](https://github.com/yoshoku/numo-tiny_linalg/compare/v0.3.8...v0.3.9)] - 2025-01-13
 
 - Bump OpenBLAS to be downloaded from 0.3.28 to 0.3.29.
