@@ -47,13 +47,13 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     r = w.transpose.dot(a.dot(w))
     r = r[r.diag_indices]
 
-    assert((v - r).abs.max < 1e-7)
+    assert_operator((v - r).abs.max, :<, 1e-7)
 
     v, w = Numo::TinyLinalg.eigh(a, vals_range: (n - m)...n)
     r = w.transpose.dot(a.dot(w))
     r = r[r.diag_indices]
 
-    assert((v - r).abs.max < 1e-7)
+    assert_operator((v - r).abs.max, :<, 1e-7)
 
     x = Numo::DComplex.new(m, n).rand - 0.5
     a = x.transpose.conjugate.dot(x)
@@ -61,13 +61,13 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     r = w.transpose.conjugate.dot(a.dot(w))
     r = r[r.diag_indices]
 
-    assert((v - r).abs.max < 1e-7)
+    assert_operator((v - r).abs.max, :<, 1e-7)
 
     v, w = Numo::TinyLinalg.eigh(a, vals_range: [n - m, n - 1])
     r = w.transpose.conjugate.dot(a.dot(w))
     r = r[r.diag_indices]
 
-    assert((v - r).abs.max < 1e-7)
+    assert_operator((v - r).abs.max, :<, 1e-7)
 
     x = Numo::DFloat.new(m, n).rand - 0.5
     y = Numo::DFloat.new(m, n).rand - 0.5
@@ -79,8 +79,8 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     e = w.transpose.dot(b.dot(w))
     e = e[e.diag_indices]
 
-    assert((v - r).abs.max < 1e-7)
-    assert((e - 1).abs.max < 1e-7)
+    assert_operator((v - r).abs.max, :<, 1e-7)
+    assert_operator((e - 1).abs.max, :<, 1e-7)
 
     v, w = Numo::TinyLinalg.eigh(a, b, vals_range: (n - m)...n)
     r = w.transpose.dot(a.dot(w))
@@ -88,8 +88,8 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     e = w.transpose.dot(b.dot(w))
     e = e[e.diag_indices]
 
-    assert((v - r).abs.max < 1e-7)
-    assert((e - 1).abs.max < 1e-7)
+    assert_operator((v - r).abs.max, :<, 1e-7)
+    assert_operator((e - 1).abs.max, :<, 1e-7)
 
     x = Numo::DComplex.new(m, n).rand - 0.5
     y = Numo::DComplex.new(m, n).rand - 0.5
@@ -101,8 +101,8 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     e = w.transpose.conjugate.dot(b.dot(w))
     e = e[e.diag_indices]
 
-    assert((v - r).abs.max < 1e-7)
-    assert((e - 1).abs.max < 1e-7)
+    assert_operator((v - r).abs.max, :<, 1e-7)
+    assert_operator((e - 1).abs.max, :<, 1e-7)
 
     v, w = Numo::TinyLinalg.eigh(a, b, vals_range: [n - m, n - 1])
     r = w.transpose.conjugate.dot(a.dot(w))
@@ -110,8 +110,8 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     e = w.transpose.conjugate.dot(b.dot(w))
     e = e[e.diag_indices]
 
-    assert((v - r).abs.max < 1e-7)
-    assert((e - 1).abs.max < 1e-7)
+    assert_operator((v - r).abs.max, :<, 1e-7)
+    assert_operator((e - 1).abs.max, :<, 1e-7)
   end
 
   def test_norm
@@ -143,12 +143,12 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
 
     assert_equal(10, Numo::TinyLinalg.norm(a))
     assert_equal(10, Numo::TinyLinalg.norm(a, 'fro'))
-    assert((Numo::TinyLinalg.norm(a, 'nuc') - 12.3643).abs < 1e-4)
-    assert((Numo::TinyLinalg.norm(a, 2) - 9.6144).abs < 1e-4)
+    assert_operator((Numo::TinyLinalg.norm(a, 'nuc') - 12.3643).abs, :<, 1e-4)
+    assert_operator((Numo::TinyLinalg.norm(a, 2) - 9.6144).abs, :<, 1e-4)
     assert_equal(11, Numo::TinyLinalg.norm(a, 1))
     assert_match(/invalid ord/, assert_raises(ArgumentError) { Numo::TinyLinalg.norm(a, 0) }.message)
     assert_equal(3, Numo::TinyLinalg.norm(a, -1))
-    assert((Numo::TinyLinalg.norm(a, -2) - 2.7498).abs < 1e-4)
+    assert_operator((Numo::TinyLinalg.norm(a, -2) - 2.7498).abs, :<, 1e-4)
     assert_equal(15, Numo::TinyLinalg.norm(a, Float::INFINITY))
     assert_equal(7, Numo::TinyLinalg.norm(a, -Float::INFINITY))
     assert_equal(15, Numo::TinyLinalg.norm(a, 'inf'))
@@ -175,14 +175,14 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     u = Numo::TinyLinalg.cholesky(b)
     error = (b - u.transpose.dot(u)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
 
     a = Numo::SComplex.new(3, 3).rand - 0.5
     b = a.transpose.conjugate.dot(a)
     l = Numo::TinyLinalg.cholesky(b, uplo: 'L')
     error = (b - l.dot(l.transpose.conjugate)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_cho_solve
@@ -193,14 +193,14 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     x = Numo::TinyLinalg.cho_solve(u, b)
     error = (b - c.dot(x)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_det
     a = Numo::DFloat[[0, 2, 3], [4, 5, 6], [7, 8, 9]]
     error = (Numo::TinyLinalg.det(a) - 3).abs
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_inv
@@ -208,7 +208,7 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     a_inv = Numo::TinyLinalg.inv(a)
     error = (Numo::DFloat.eye(3) - a_inv.dot(a)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_pinv
@@ -216,7 +216,7 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     a_inv = Numo::TinyLinalg.pinv(a)
     error = (Numo::DComplex.eye(3) - a_inv.dot(a)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_qr
@@ -246,10 +246,10 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
 
     q, r = Numo::TinyLinalg.qr(a, mode: 'reduce')
 
-    assert(error_a < 1e-7)
-    assert(error_b < 1e-7)
-    assert(error_c < 1e-7)
-    assert(error_d < 1e-7)
+    assert_operator(error_a, :<, 1e-7)
+    assert_operator(error_b, :<, 1e-7)
+    assert_operator(error_c, :<, 1e-7)
+    assert_operator(error_d, :<, 1e-7)
     assert_equal(q.shape, [ma, ma])
     assert_equal(r.shape, [ma, na])
   end
@@ -260,7 +260,7 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     x = Numo::TinyLinalg.solve(a, b)
     error_ab = (b - a.dot(x)).abs.max
 
-    assert(error_ab < 1e-7)
+    assert_operator(error_ab, :<, 1e-7)
   end
 
   def test_solve_triangular
@@ -269,7 +269,7 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     x = Numo::TinyLinalg.solve_triangular(a, b)
     error_ab = (b - a.dot(x)).abs.max
 
-    assert(error_ab < 1e-7)
+    assert_operator(error_ab, :<, 1e-7)
   end
 
   def test_svd
@@ -278,7 +278,7 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_dot
@@ -291,9 +291,9 @@ class TestTinyLinalg < Minitest::Test # rubocop:disable Metrics/ClassLength
     error_cb = (c.transpose.dot(b) - Numo::TinyLinalg.dot(c.transpose, b)).abs.max
     error_cd = (c.dot(d) - Numo::TinyLinalg.dot(c, d)).abs.max
 
-    assert(error_ab < 1e-7)
-    assert(error_ac < 1e-7)
-    assert(error_cb < 1e-7)
-    assert(error_cd < 1e-7)
+    assert_operator(error_ab, :<, 1e-7)
+    assert_operator(error_ac, :<, 1e-7)
+    assert_operator(error_cb, :<, 1e-7)
+    assert_operator(error_cd, :<, 1e-7)
   end
 end

@@ -112,28 +112,28 @@ class TestTinyLinalgBlas < Minitest::Test # rubocop:disable Metrics/ClassLength
     a = Numo::DFloat.new(3).rand
     error = (Numo::NMath.sqrt(a.dot(a)) - Numo::TinyLinalg::Blas.dnrm2(a)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_blas_snrm2
     a = Numo::SFloat.new(3).rand
     error = (Numo::NMath.sqrt(a.dot(a)) - Numo::TinyLinalg::Blas.snrm2(a)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_blas_dznrm2
     a = Numo::DComplex.new(3).rand
     error = (Numo::NMath.sqrt(a.dot(a.conjugate)) - Numo::TinyLinalg::Blas.dznrm2(a)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_blas_scnrm2
     a = Numo::SComplex.new(3).rand
     error = (Numo::NMath.sqrt(a.dot(a.conjugate)) - Numo::TinyLinalg::Blas.scnrm2(a)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_blas_aliases
@@ -142,8 +142,8 @@ class TestTinyLinalgBlas < Minitest::Test # rubocop:disable Metrics/ClassLength
     error_a = (Numo::NMath.sqrt(a.dot(a.conjugate)) - Numo::TinyLinalg::Blas.znrm2(a)).abs.max
     error_b = (Numo::NMath.sqrt(b.dot(b.conjugate)) - Numo::TinyLinalg::Blas.cnrm2(b)).abs.max
 
-    assert(error_a < 1e-7)
-    assert(error_b < 1e-5)
+    assert_operator(error_a, :<, 1e-7)
+    assert_operator(error_b, :<, 1e-5)
   end
 
   def test_blas_call

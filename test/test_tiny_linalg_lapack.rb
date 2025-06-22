@@ -26,8 +26,8 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     q, = Numo::TinyLinalg::Lapack.dorgqr(qr[true, 0...mb], tau)
     error_b = (b - q.dot(r)).abs.max
 
-    assert(error_a < 1e-7)
-    assert(error_b < 1e-7)
+    assert_operator(error_a, :<, 1e-7)
+    assert_operator(error_b, :<, 1e-7)
   end
 
   def test_lapack_sgeqrf_sorgqr
@@ -49,8 +49,8 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     q, = Numo::TinyLinalg::Lapack.sorgqr(qr[true, 0...mb], tau)
     error_b = (b - q.dot(r)).abs.max
 
-    assert(error_a < 1e-5)
-    assert(error_b < 1e-5)
+    assert_operator(error_a, :<, 1e-5)
+    assert_operator(error_b, :<, 1e-5)
   end
 
   def test_lapack_zgeqrf_zungqr
@@ -72,8 +72,8 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     q, = Numo::TinyLinalg::Lapack.zungqr(qr[true, 0...mb], tau)
     error_b = (b - q.dot(r)).abs.max
 
-    assert(error_a < 1e-7)
-    assert(error_b < 1e-7)
+    assert_operator(error_a, :<, 1e-7)
+    assert_operator(error_b, :<, 1e-7)
   end
 
   def test_lapack_dgesv
@@ -86,8 +86,8 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     error_ab = (b - a.dot(ret_ab[1])).abs.max
     error_cd = (d - c.dot(ret_cd[1])).abs.max
 
-    assert(error_ab < 1e-7)
-    assert(error_cd < 1e-7)
+    assert_operator(error_ab, :<, 1e-7)
+    assert_operator(error_cd, :<, 1e-7)
   end
 
   def test_lapack_sgesv
@@ -100,8 +100,8 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     error_ab = (b - a.dot(ret_ab[1])).abs.max
     error_cd = (d - c.dot(ret_cd[1])).abs.max
 
-    assert(error_ab < 1e-5)
-    assert(error_cd < 1e-5)
+    assert_operator(error_ab, :<, 1e-5)
+    assert_operator(error_cd, :<, 1e-5)
   end
 
   def test_lapack_zgesv
@@ -114,8 +114,8 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     error_ab = (b - a.dot(ret_ab[1])).abs.max
     error_cd = (d - c.dot(ret_cd[1])).abs.max
 
-    assert(error_ab < 1e-7)
-    assert(error_cd < 1e-7)
+    assert_operator(error_ab, :<, 1e-7)
+    assert_operator(error_cd, :<, 1e-7)
   end
 
   def test_lapack_cgesv
@@ -128,8 +128,8 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     error_ab = (b - a.dot(ret_ab[1])).abs.max
     error_cd = (d - c.dot(ret_cd[1])).abs.max
 
-    assert(error_ab < 1e-5)
-    assert(error_cd < 1e-5)
+    assert_operator(error_ab, :<, 1e-5)
+    assert_operator(error_cd, :<, 1e-5)
   end
 
   def test_lapack_dgesvd
@@ -138,7 +138,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_sgesvd
@@ -147,7 +147,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_zgesvd
@@ -156,7 +156,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_cgesvd
@@ -165,7 +165,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_dgesdd
@@ -174,7 +174,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_sgesdd
@@ -183,7 +183,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_zgesdd
@@ -192,7 +192,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_cgesdd
@@ -201,7 +201,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     z = u.dot(s.diag).dot(vt)
     error = (x - z).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_dgetrf
@@ -214,7 +214,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     pm = Numo::DFloat.eye(nr).tap { |m| piv.each_with_index { |v, i| m[true, [v - 1, i]] = m[true, [i, v - 1]].dup } }
     error = (a - pm.dot(l).dot(u)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_sgetrf
@@ -227,7 +227,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     pm = Numo::SFloat.eye(nr).tap { |m| piv.each_with_index { |v, i| m[true, [v - 1, i]] = m[true, [i, v - 1]].dup } }
     error = (a - pm.dot(l).dot(u)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_zgetrf
@@ -240,7 +240,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     pm = Numo::DComplex.eye(nr).tap { |m| piv.each_with_index { |v, i| m[true, [v - 1, i]] = m[true, [i, v - 1]].dup } }
     error = (a - pm.dot(l).dot(u)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_cgetrf
@@ -253,7 +253,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     pm = Numo::SComplex.eye(nr).tap { |m| piv.each_with_index { |v, i| m[true, [v - 1, i]] = m[true, [i, v - 1]].dup } }
     error = (a - pm.dot(l).dot(u)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_dgetri
@@ -263,7 +263,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     a_inv, = Numo::TinyLinalg::Lapack.dgetri(lu, piv)
     error = (Numo::DFloat.eye(n) - a_inv.dot(a)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_sgetri
@@ -273,7 +273,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     a_inv, = Numo::TinyLinalg::Lapack.sgetri(lu, piv)
     error = (Numo::SFloat.eye(n) - a_inv.dot(a)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_zgetri
@@ -283,7 +283,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     a_inv, = Numo::TinyLinalg::Lapack.zgetri(lu, piv)
     error = (Numo::DComplex.eye(n) - a_inv.dot(a)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_cgetri
@@ -293,7 +293,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     a_inv, = Numo::TinyLinalg::Lapack.cgetri(lu, piv)
     error = (Numo::SComplex.eye(n) - a_inv.dot(a)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_dtrtrs
@@ -304,7 +304,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     error = (b - a.dot(x)).abs.max
 
     assert_equal(0, info)
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_strtrs
@@ -315,7 +315,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     error = (b - a.dot(x)).abs.max
 
     assert_equal(0, info)
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_ztrtrs
@@ -326,7 +326,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     error = (b - a.dot(x)).abs.max
 
     assert_equal(0, info)
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_ctrtrs
@@ -337,7 +337,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     error = (b - a.dot(x)).abs.max
 
     assert_equal(0, info)
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_dpotrf
@@ -348,13 +348,13 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     cu = c.triu
     error = (b - cu.transpose.dot(cu)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
 
     c, _info = Numo::TinyLinalg::Lapack.dpotrf(b.dup, uplo: 'L')
     cl = c.tril
     error = (b - cl.dot(cl.transpose)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_spotrf
@@ -365,13 +365,13 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     cu = c.triu
     error = (b - cu.transpose.dot(cu)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
 
     c, _info = Numo::TinyLinalg::Lapack.spotrf(b.dup, uplo: 'L')
     cl = c.tril
     error = (b - cl.dot(cl.transpose)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_zpotrf
@@ -382,13 +382,13 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     cu = c.triu
     error = (b - cu.transpose.conjugate.dot(cu)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
 
     c, _info = Numo::TinyLinalg::Lapack.zpotrf(b.dup, uplo: 'L')
     cl = c.tril
     error = (b - cl.dot(cl.transpose.conjugate)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_cpotrf
@@ -399,13 +399,13 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     cu = c.triu
     error = (b - cu.transpose.conjugate.dot(cu)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
 
     c, _info = Numo::TinyLinalg::Lapack.cpotrf(b.dup, uplo: 'L')
     cl = c.tril
     error = (b - cl.dot(cl.transpose.conjugate)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_dpotrs
@@ -417,7 +417,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     x, _info = Numo::TinyLinalg::Lapack.dpotrs(f, b.dup)
     error = (b - c.dot(x)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_spotrs
@@ -429,7 +429,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     x, _info = Numo::TinyLinalg::Lapack.spotrs(f, b.dup, uplo: 'L')
     error = (b - c.dot(x)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_zpotrs
@@ -441,7 +441,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     x, _info = Numo::TinyLinalg::Lapack.zpotrs(f, b.dup, uplo: 'L')
     error = (b - c.dot(x)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_cpotrs
@@ -453,7 +453,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     x, _info = Numo::TinyLinalg::Lapack.cpotrs(f, b.dup)
     error = (b - c.dot(x)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_dsyev
@@ -463,7 +463,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, w, _info = Numo::TinyLinalg::Lapack.dsyev(c.dup, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_ssyev
@@ -473,7 +473,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, w, _info = Numo::TinyLinalg::Lapack.ssyev(c.dup, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_zheev
@@ -483,7 +483,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, w, _info = Numo::TinyLinalg::Lapack.zheev(c.dup, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_cheev
@@ -493,7 +493,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, w, _info = Numo::TinyLinalg::Lapack.cheev(c.dup, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_dsyevd
@@ -503,7 +503,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, w, _info = Numo::TinyLinalg::Lapack.dsyevd(c.dup, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_ssyevd
@@ -513,7 +513,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, w, _info = Numo::TinyLinalg::Lapack.ssyevd(c.dup, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_zheevd
@@ -523,7 +523,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, w, _info = Numo::TinyLinalg::Lapack.zheevd(c.dup, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_cheevd
@@ -533,7 +533,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, w, _info = Numo::TinyLinalg::Lapack.cheevd(c.dup, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_dsyevr
@@ -548,10 +548,10 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     # _c, mv, w, v, _isuppz, _info = Numo::TinyLinalg::Lapack.dsyevr(c.dup, range: 'V', vl: 1e-6, vu: 1e+6)
     # error_v = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error_a < 1e-7)
-    assert(error_i < 1e-7)
+    assert_operator(error_a, :<, 1e-7)
+    assert_operator(error_i, :<, 1e-7)
     # assert(error_v < 1e-7)
-    assert(mi < n)
+    assert_operator(mi, :<, n)
     # assert(mv < n)
   end
 
@@ -567,10 +567,10 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     # _c, mv, w, v, _isuppz, _info = Numo::TinyLinalg::Lapack.ssyevr(c.dup, range: 'V', vl: 1e-6, vu: 1e+6)
     # error_v = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error_a < 1e-5)
-    assert(error_i < 1e-5)
+    assert_operator(error_a, :<, 1e-5)
+    assert_operator(error_i, :<, 1e-5)
     # assert(error_v < 1e-5)
-    assert(mi < n)
+    assert_operator(mi, :<, n)
     # assert(mv < n)
   end
 
@@ -586,10 +586,10 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     # _c, mv, w, v, _ifail, _info = Numo::TinyLinalg::Lapack.zheevr(c.dup, range: 'V', vl: 1e-6, vu: 1e+6)
     # error_v = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error_a < 1e-7)
-    assert(error_i < 1e-7)
+    assert_operator(error_a, :<, 1e-7)
+    assert_operator(error_i, :<, 1e-7)
     # assert(error_v < 1e-7)
-    assert(mi < n)
+    assert_operator(mi, :<, n)
     # assert(mv < n)
   end
 
@@ -605,10 +605,10 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     # _c, mv, w, v, _ifail, _info = Numo::TinyLinalg::Lapack.chegvx(c.dup, range: 'V', vl: 1e-6, vu: 1e+6)
     # error_v = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error_a < 1e-5)
-    assert(error_i < 1e-5)
+    assert_operator(error_a, :<, 1e-5)
+    assert_operator(error_i, :<, 1e-5)
     # assert(error_v < 1e-5)
-    assert(mi < n)
+    assert_operator(mi, :<, n)
     # assert(mv < n)
   end
 
@@ -620,7 +620,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, _x, w, _info = Numo::TinyLinalg::Lapack.dsygv(c.dup, b.dup, itype: 1, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_ssygv
@@ -631,7 +631,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, _x, w, _info = Numo::TinyLinalg::Lapack.ssygv(c.dup, b.dup, itype: 1, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_zhegv
@@ -647,7 +647,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, _x, w, _info = Numo::TinyLinalg::Lapack.zhegv(c.dup, d.dup, itype: 1, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_chegv
@@ -663,7 +663,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, _x, w, _info = Numo::TinyLinalg::Lapack.chegv(c.dup, d.dup, itype: 1, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_dsygvd
@@ -674,7 +674,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, _x, w, _info = Numo::TinyLinalg::Lapack.dsygvd(c.dup, b.dup, itype: 1, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_ssygvd
@@ -685,7 +685,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, _x, w, _info = Numo::TinyLinalg::Lapack.ssygvd(c.dup, b.dup, itype: 1, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_zhegvd
@@ -701,7 +701,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, _x, w, _info = Numo::TinyLinalg::Lapack.zhegvd(c.dup, d.dup, itype: 1, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error < 1e-7)
+    assert_operator(error, :<, 1e-7)
   end
 
   def test_lapack_chegvd
@@ -717,7 +717,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     v, _x, w, _info = Numo::TinyLinalg::Lapack.chegvd(c.dup, d.dup, itype: 1, jobz: 'V', uplo: 'U')
     error = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error < 1e-5)
+    assert_operator(error, :<, 1e-5)
   end
 
   def test_lapack_dsygvx
@@ -733,10 +733,10 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     # _a, _b, mv, w, v, _ifail, _info = Numo::TinyLinalg::Lapack.dsygvx(c.dup, b.dup, range: 'V', vl: 1e-6, vu: 1e+6)
     # error_v = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error_a < 1e-7)
-    assert(error_i < 1e-7)
+    assert_operator(error_a, :<, 1e-7)
+    assert_operator(error_i, :<, 1e-7)
     # assert(error_v < 1e-7)
-    assert(mi < n)
+    assert_operator(mi, :<, n)
     # assert(mv < n)
   end
 
@@ -753,10 +753,10 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     # _a, _b, mv, w, v, _ifail, _info = Numo::TinyLinalg::Lapack.ssygvx(c.dup, b.dup, range: 'V', vl: 1e-6, vu: 1e+6)
     # error_v = (c - v.dot(w.diag).dot(v.transpose)).abs.max
 
-    assert(error_a < 1e-5)
-    assert(error_i < 1e-5)
+    assert_operator(error_a, :<, 1e-5)
+    assert_operator(error_i, :<, 1e-5)
     # assert(error_v < 1e-5)
-    assert(mi < n)
+    assert_operator(mi, :<, n)
     # assert(mv < n)
   end
 
@@ -773,10 +773,10 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     # _a, _b, mv, w, v, _ifail, _info = Numo::TinyLinalg::Lapack.zhegvx(c.dup, b.dup, range: 'V', vl: 1e-6, vu: 1e+6)
     # error_v = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error_a < 1e-7)
-    assert(error_i < 1e-7)
+    assert_operator(error_a, :<, 1e-7)
+    assert_operator(error_i, :<, 1e-7)
     # assert(error_v < 1e-7)
-    assert(mi < n)
+    assert_operator(mi, :<, n)
     # assert(mv < n)
   end
 
@@ -793,10 +793,10 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     # _a, _b, mv, w, v, _ifail, _info = Numo::TinyLinalg::Lapack.chegvx(c.dup, b.dup, range: 'V', vl: 1e-6, vu: 1e+6)
     # error_v = (c - v.dot(w.diag).dot(v.transpose.conjugate)).abs.max
 
-    assert(error_a < 1e-5)
-    assert(error_i < 1e-5)
+    assert_operator(error_a, :<, 1e-5)
+    assert_operator(error_i, :<, 1e-5)
     # assert(error_v < 1e-5)
-    assert(mi < n)
+    assert_operator(mi, :<, n)
     # assert(mv < n)
   end
 
@@ -807,8 +807,8 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     norm = Numo::TinyLinalg::Lapack.dlange(a, norm: 'M')
     error_m = (norm - a.abs.max).abs
 
-    assert(error_f < 1e-7)
-    assert(error_m < 1e-7)
+    assert_operator(error_f, :<, 1e-7)
+    assert_operator(error_m, :<, 1e-7)
   end
 
   def test_lapack_slange
@@ -818,8 +818,8 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     norm = Numo::TinyLinalg::Lapack.dlange(a, norm: 'M')
     error_m = (norm - a.abs.max).abs
 
-    assert(error_f < 1e-5)
-    assert(error_m < 1e-5)
+    assert_operator(error_f, :<, 1e-5)
+    assert_operator(error_m, :<, 1e-5)
   end
 
   def test_lapack_zlange
@@ -829,8 +829,8 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     norm = Numo::TinyLinalg::Lapack.zlange(a, norm: 'M')
     error_m = (norm - a.abs.max).abs
 
-    assert(error_f < 1e-7)
-    assert(error_m < 1e-7)
+    assert_operator(error_f, :<, 1e-7)
+    assert_operator(error_m, :<, 1e-7)
   end
 
   def test_lapack_clange
@@ -840,7 +840,7 @@ class TestTinyLinalgLapack < Minitest::Test # rubocop:disable Metrics/ClassLengt
     norm = Numo::TinyLinalg::Lapack.clange(a, norm: 'M')
     error_m = (norm - a.abs.max).abs
 
-    assert(error_f < 1e-5)
-    assert(error_m < 1e-5)
+    assert_operator(error_f, :<, 1e-5)
+    assert_operator(error_m, :<, 1e-5)
   end
 end
