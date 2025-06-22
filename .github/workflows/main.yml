@@ -37,7 +37,9 @@ jobs:
           ruby-version: 3.3
           bundler-cache: true
       - name: Install OpenBLAS and LAPACK
-        run: pacman -S --noconfirm mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-lapack
+        run: |
+          pacman -Syu
+          pacman -S --noconfirm mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-lapack
       - name: Run the default task
         run: |
           bundle exec rake compile -- --with-opt-lib="C:\msys64\ucrt64\lib" --with-opt-include="C:\msys64\ucrt64\include\openblas"
