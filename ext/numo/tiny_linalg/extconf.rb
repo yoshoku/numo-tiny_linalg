@@ -46,8 +46,8 @@ if build_openblas
 
   VENDOR_DIR = File.expand_path("#{__dir__}/../../../vendor")
   TINYLINALG_DIR = File.expand_path("#{__dir__}/../../../lib/numo/tiny_linalg")
-  OPENBLAS_VER = '0.3.29'
-  OPENBLAS_KEY = '853a0c5c0747c5943e7ef4bbb793162d'
+  OPENBLAS_VER = '0.3.30'
+  OPENBLAS_KEY = '8db3d57f4d4485c6ae3f21ea465660e7'
   OPENBLAS_URI = "https://github.com/OpenMathLib/OpenBLAS/archive/v#{OPENBLAS_VER}.tar.gz"
   OPENBLAS_TGZ = "#{VENDOR_DIR}/tmp/openblas.tgz"
 
