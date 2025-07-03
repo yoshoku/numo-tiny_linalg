@@ -38,7 +38,6 @@ jobs:
       - name: Install OpenBLAS and LAPACK
         run: |
           pacman -Syu
-          pacman -S --noconfirm mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gcc-libs
           pacman -S --noconfirm mingw-w64-ucrt-x86_64-openblas mingw-w64-ucrt-x86_64-lapack
       - name: Install numo-narray
         run: |
