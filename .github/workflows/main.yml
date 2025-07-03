@@ -46,7 +46,7 @@ jobs:
           gem specific_install -l 'https://github.com/ruby-numo/numo-narray.git'
       - name: Run the default task
         run: |
-          bundle exec rake compile -- --with-opt-lib="C:\msys64\ucrt64\bin" --with-opt-include="C:\msys64\ucrt64\include\openblas"
+          bundle exec rake compile -- --with-opt-lib="C:\msys64\ucrt64\lib" --with-opt-include="C:\msys64\ucrt64\include\openblas"
           bundle exec rake test
 
   build-mac:
