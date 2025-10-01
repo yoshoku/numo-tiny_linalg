@@ -5,7 +5,7 @@
 [![Gem Version](https://badge.fury.io/rb/numo-tiny_linalg.svg)](https://badge.fury.io/rb/numo-tiny_linalg)
 [![Build Status](https://github.com/yoshoku/numo-tiny_linalg/actions/workflows/main.yml/badge.svg)](https://github.com/yoshoku/numo-tiny_linalg/actions/workflows/main.yml)
 [![BSD 3-Clause License](https://img.shields.io/badge/License-BSD%203--Clause-orange.svg)](https://github.com/yoshoku/numo-tiny_linalg/blob/main/LICENSE.txt)
-[![Documentation](https://img.shields.io/badge/api-reference-blue.svg)](https://yoshoku.github.io/numo-tiny_linalg/doc/)
+[![Documentation](https://img.shields.io/badge/api-reference-blue.svg)](https://gemdocs.org/gems/numo-tiny_linalg/)
 
 Numo::TinyLinalg is a subset library from [Numo::Linalg](https://github.com/ruby-numo/numo-linalg) consisting only of methods used in Machine Learning algorithms.
 The functions Numo::TinyLinalg supports are dot, det, eigh, inv, pinv, qr, solve, cholesky, cho_solve and svd.
